@@ -31,6 +31,10 @@ class PairedImageDataset(Dataset):
         phase: str = "train",
     ):
         super().__init__()
+        self.patch_size = patch_size
+        self.use_flip = use_flip
+        self.use_rot = use_rot
+        self.phase = phase
 
     def __len__(self) -> int:
         return len(self.lq_paths)
