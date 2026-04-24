@@ -20,16 +20,22 @@ class SyntheticNoisyDataset(Dataset):
 
 def build_dataloader(opt, phase="train"):
     ds_cfg = opt.get("datasets", {}).get(phase, {})
-    dataset = SyntheticNoisyDataset(
-        num_samples=int(ds_cfg.get("num_samples", 400)),
-        patch_size=int(ds_cfg.get("patch_size", 64)),
-        noise_sigma=float(ds_cfg.get("noise_sigma", 0.1)),
-    )
+    ds_type = ds_cfg.get("type", "Synthetic")
+
+    if ds_type in ("Synthetic", "SyntheticNoisy"):
+        dataset = SyntheticNoisyDataset(
+            num_samples=int(ds_cfg.get("num_samples", 400)),
+            patch_size=int(ds_cfg.get("patch_size", 64)),
+            noise_sigma=float(ds_cfg.get("noise_sigma", 0.1)),
+        )
+    else:
+        raise ValueError(f"Unsupported dataset type: '{ds_type}'")
+
     return DataLoader(
         dataset,
         batch_size=int(ds_cfg.get("batch_size", 4)),
         shuffle=bool(ds_cfg.get("shuffle", phase == "train")),
         num_workers=int(ds_cfg.get("num_workers", 0)),
-        pin_memory=torch.cuda.is_available(),
+        pin_memory=bool(ds_cfg.get("pin_memory", torch.cuda.is_available())),
         drop_last=phase == "train",
     )
