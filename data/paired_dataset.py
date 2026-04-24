@@ -10,10 +10,10 @@ from torch.utils.data import Dataset
 _IMG_EXTENSIONS = {".png", ".jpg", ".jpeg", ".tiff", ".bmp", ".PNG", ".JPG", ".JPEG"}
 
 def scan_folder(folder: str) -> list[str]:
-    """Return list of image paths in folder"""
+    """Return sorted list of image paths in folder"""
     paths = [
         os.path.join(folder, f)
-        for f in os.listdir(folder)
+        for f in sorted(os.listdir(folder))
         if os.path.splitext(f)[1] in _IMG_EXTENSIONS
     ]
     return paths
