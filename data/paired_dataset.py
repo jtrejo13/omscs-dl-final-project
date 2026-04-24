@@ -3,7 +3,20 @@
 # "Simple Baselines for Image Restoration", Chen et al., ECCV 2022
 # Copyright (c) 2022 megvii-model. All Rights Reserved.
 # ------------------------------------------------------------------------
+import os
 from torch.utils.data import Dataset
+
+
+_IMG_EXTENSIONS = {".png", ".jpg", ".jpeg"}
+
+def scan_folder(folder: str) -> list[str]:
+    """Return list of image paths in folder"""
+    paths = [
+        os.path.join(folder, f)
+        for f in os.listdir(folder)
+        if os.path.splitext(f)[1] in _IMG_EXTENSIONS
+    ]
+    return paths
 
 
 class PairedImageDataset(Dataset):
@@ -35,6 +48,8 @@ class PairedImageDataset(Dataset):
         self.use_flip = use_flip
         self.use_rot = use_rot
         self.phase = phase
+
+        self.lq_paths = scan_folder(lq_dir)
 
     def __len__(self) -> int:
         return len(self.lq_paths)
