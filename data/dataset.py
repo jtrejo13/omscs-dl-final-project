@@ -23,7 +23,7 @@ def build_dataloader(opt, phase="train"):
     ds_cfg = opt.get("datasets", {}).get(phase, {})
     ds_type = ds_cfg.get("type", "Synthetic")
 
-    if ds_type in ("Synthetic", "SyntheticNoisy"):
+    if ds_type in ("Synthetic", "SyntheticNoisyDataset"):
         dataset = SyntheticNoisyDataset(
             num_samples=int(ds_cfg.get("num_samples", 400)),
             patch_size=int(ds_cfg.get("patch_size", 64)),
