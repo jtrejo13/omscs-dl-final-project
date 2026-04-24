@@ -4,6 +4,9 @@
 # Copyright (c) 2022 megvii-model. All Rights Reserved.
 # ------------------------------------------------------------------------
 import os
+import numpy as np
+
+from PIL import Image
 from torch.utils.data import Dataset
 
 
@@ -17,6 +20,12 @@ def scan_folder(folder: str) -> list[str]:
         if os.path.splitext(f)[1] in _IMG_EXTENSIONS
     ]
     return paths
+
+
+def _load_image(path: str) -> np.ndarray:
+    """Load image as numpy array in [0, 1]"""
+    img = Image.open(path).convert("RGB")
+    return np.array(img, dtype=np.float32) / 255.0
 
 
 class PairedImageDataset(Dataset):
