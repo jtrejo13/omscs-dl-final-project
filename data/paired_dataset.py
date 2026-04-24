@@ -136,6 +136,11 @@ class PairedImageDataset(Dataset):
                 lq, gt = paired_random_crop(lq, gt, self.patch_size)
             else:
                 h, w = lq.shape[:2]
+                if h < self.patch_size or w < self.patch_size:
+                    raise ValueError(
+                        f"Image ({h}x{w}) is smaller than patch_size ({self.patch_size}). "
+                        "Use a smaller patch_size or larger images."
+                    )
                 top = random.randint(0, h - self.patch_size)
                 left = random.randint(0, w - self.patch_size)
                 lq = lq[top:top + self.patch_size, left:left + self.patch_size, :]
