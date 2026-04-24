@@ -1,0 +1,45 @@
+name: dummy_experiment
+
+model:
+  type: dummy                   # 'dummy'
+  in_channels:  3
+  mid_channels: 16
+
+datasets:
+  train:
+    type: Synthetic             # 'Synthetic' (no real data needed)
+    num_samples: 400
+    patch_size:  64
+    noise_sigma: 0.1
+    batch_size:  4
+    num_workers: 0
+    shuffle: true
+
+    # type:       PairedImage
+    # lq_dir:     data/train/input
+    # gt_dir:     data/train/target
+    # patch_size: 256
+    # use_flip:   true
+    # use_rot:    true
+
+  val:
+    type: Synthetic
+    num_samples: 50
+    patch_size:  64
+    noise_sigma: 0.1
+    batch_size:  4
+    num_workers: 0
+    shuffle: false
+
+    # type:       PairedImage
+    # lq_dir:     data/val/input
+    # gt_dir:     data/val/target
+    # patch_size: 0
+
+# Hyperparamters
+train:
+  epochs:    10
+  lr:        2.0e-4
+  log_freq:  5           # log loss every N iterations
+  val_freq:  2           # validate every N epochs
+  save_freq: 5           # save checkpoint every N epochs
