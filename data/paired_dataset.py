@@ -43,7 +43,7 @@ def paired_random_crop(img_lq: np.ndarray, img_gt: np.ndarray, patch_size: int) 
     h, w = img_lq.shape[:2]
     if h < patch_size or w < patch_size:
         raise ValueError(
-            f"Image ({h}x{w}) is smaller than patch_size ({patch_size})."
+            f"Image ({h}x{w}) is smaller than patch_size ({patch_size}). "
             "Use a smaller patch_size or larger images."
         )
     top = random.randint(0, h - patch_size)
