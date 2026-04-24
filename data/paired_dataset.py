@@ -7,7 +7,7 @@ import os
 import random
 
 import numpy as np
-
+import torch
 from PIL import Image
 from torch.utils.data import Dataset
 
@@ -30,6 +30,11 @@ def _load_image(path: str) -> np.ndarray:
     return np.array(img, dtype=np.float32) / 255.0
 
 
+def _to_tensor(img: np.ndarray) -> torch.Tensor:
+    """Convert HWC float32 numpy array to CHW float32 tensor"""
+    return torch.from_numpy(np.ascontiguousarray(img.transpose(2, 0, 1)))
+
+
 def paired_random_crop(img_lq: np.ndarray, img_gt: np.ndarray, patch_size: int) -> tuple:
     """Paired random crop.
 
@@ -46,6 +51,27 @@ def paired_random_crop(img_lq: np.ndarray, img_gt: np.ndarray, patch_size: int) 
     img_lq = img_lq[top:top + patch_size, left:left + patch_size, :]
     img_gt = img_gt[top:top + patch_size, left:left + patch_size, :]
     return img_lq, img_gt
+
+
+def augment(imgs: list, hflip: bool = True, rotation: bool = True) -> list:
+    """Apply random horizontal flip and 90-degree rotations.
+
+    Ported from NAFNet/basicsr/data/transforms.py.
+    """
+    hflip = hflip and random.random() < 0.5
+    vflip = rotation and random.random() < 0.5
+    rot90 = rotation and random.random() < 0.5
+
+    def _augment_single(img):
+        if hflip:
+            img = img[:, ::-1, :].copy()
+        if vflip:
+            img = img[::-1, :, :].copy()
+        if rot90:
+            img = img.transpose(1, 0, 2)
+        return img
+
+    return [_augment_single(img) for img in imgs]
 
 
 class PairedImageDataset(Dataset):
@@ -112,3 +138,18 @@ class PairedImageDataset(Dataset):
                 top = random.randint(0, h - self.patch_size)
                 left = random.randint(0, w - self.patch_size)
                 lq = lq[top:top + self.patch_size, left:left + self.patch_size, :]
+
+        # Augmentation
+        # Note: This is part of training only
+        if self.phase == "train" and (self.use_flip or self.use_rot):
+            if gt is not None:
+                lq, gt = augment([lq, gt], hflip=self.use_flip, rotation=self.use_rot)
+            else:
+                lq = augment([lq], hflip=self.use_flip, rotation=self.use_rot)[0]
+
+        out = {"lq": _to_tensor(lq), "path": lq_path}
+
+        if gt is not None:
+            out["gt"] = _to_tensor(gt)
+
+        return out
