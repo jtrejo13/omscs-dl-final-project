@@ -1,0 +1,24 @@
+name: dummy_experiment
+
+model:
+  type: dummy
+  in_channels:  3
+  mid_channels: 16
+
+path:
+  pretrain_model: results/dummy_experiment/checkpoints/latest.pth
+
+datasets:
+  test:
+    type: Synthetic
+    num_samples: 20
+    patch_size:  64
+    noise_sigma: 0.1
+    batch_size:  1
+    num_workers: 0
+    shuffle: false
+
+    # type:       PairedImage
+    # lq_dir:     data/test/input
+    # gt_dir:     data/test/target   # omit/leave empty for blind inference
+    # patch_size: 0
