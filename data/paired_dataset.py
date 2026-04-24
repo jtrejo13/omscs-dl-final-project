@@ -50,6 +50,17 @@ class PairedImageDataset(Dataset):
         self.phase = phase
 
         self.lq_paths = scan_folder(lq_dir)
+        if not self.lq_paths:
+            raise ValueError(f"No images found in lq_dir: {lq_dir}")
+        
+        self.gt_paths = None
+        if gt_dir is not None:
+            self.gt_paths = scan_folder(gt_dir)
+            if len(self.gt_paths) != len(self.lq_paths):
+                raise ValueError(
+                    f"Number of LQ images ({len(self.lq_paths)}) does not match "
+                    f"GT images ({len(self.gt_paths)}) in {gt_dir}"
+                )
 
     def __len__(self) -> int:
         return len(self.lq_paths)
