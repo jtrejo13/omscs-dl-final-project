@@ -1,5 +1,6 @@
 import torch
 from torch.utils.data import Dataset, DataLoader
+from .paired_dataset import PairedImageDataset
 
 
 class SyntheticNoisyDataset(Dataset):
@@ -20,16 +21,31 @@ class SyntheticNoisyDataset(Dataset):
 
 def build_dataloader(opt, phase="train"):
     ds_cfg = opt.get("datasets", {}).get(phase, {})
-    dataset = SyntheticNoisyDataset(
-        num_samples=int(ds_cfg.get("num_samples", 400)),
-        patch_size=int(ds_cfg.get("patch_size", 64)),
-        noise_sigma=float(ds_cfg.get("noise_sigma", 0.1)),
-    )
+    ds_type = ds_cfg.get("type", "Synthetic")
+
+    if ds_type in ("Synthetic", "SyntheticNoisyDataset"):
+        dataset = SyntheticNoisyDataset(
+            num_samples=int(ds_cfg.get("num_samples", 400)),
+            patch_size=int(ds_cfg.get("patch_size", 64)),
+            noise_sigma=float(ds_cfg.get("noise_sigma", 0.1)),
+        )
+    elif ds_type == "PairedImage":
+        dataset = PairedImageDataset(
+            lq_dir=ds_cfg["lq_dir"],
+            gt_dir=ds_cfg.get("gt_dir", None),
+            patch_size=int(ds_cfg.get("patch_size", 0)),
+            use_flip=bool(ds_cfg.get("use_flip", False)),
+            use_rot=bool(ds_cfg.get("use_rot", False)),
+            phase=phase,
+        )
+    else:
+        raise ValueError(f"Unsupported dataset type: '{ds_type}'")
+
     return DataLoader(
         dataset,
         batch_size=int(ds_cfg.get("batch_size", 4)),
         shuffle=bool(ds_cfg.get("shuffle", phase == "train")),
         num_workers=int(ds_cfg.get("num_workers", 0)),
-        pin_memory=torch.cuda.is_available(),
+        pin_memory=bool(ds_cfg.get("pin_memory", torch.cuda.is_available())),
         drop_last=phase == "train",
     )

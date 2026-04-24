@@ -44,7 +44,7 @@ We modify NAFNet's core design choices by training the baseline alongside three 
 ## Models
 
 | Model | Modification | What it tests |
-|-|-||
+|---|---|---|
 | **BaselineNAFNet** | None | Reference point |
 | **Variant A** — GELU Gate | `x1 * GELU(x2)` instead of `x1 * x2` | Role of the activation-free gate |
 | **Variant B** — No SCA | SCA module removed | Contribution of channel attention |
