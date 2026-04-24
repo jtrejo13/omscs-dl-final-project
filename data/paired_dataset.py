@@ -7,7 +7,7 @@ import os
 from torch.utils.data import Dataset
 
 
-_IMG_EXTENSIONS = {".png", ".jpg", ".jpeg"}
+_IMG_EXTENSIONS = {".png", ".jpg", ".jpeg", ".tiff", ".bmp", ".PNG", ".JPG", ".JPEG"}
 
 def scan_folder(folder: str) -> list[str]:
     """Return list of image paths in folder"""
