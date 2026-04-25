@@ -1,11 +1,12 @@
 #!/bin/bash
-#SBATCH --job-name=nafnet_smoke
-#SBATCH --partition=ice-gpu
-#SBATCH --gres=gpu:1
-#SBATCH --mem=32G
-#SBATCH --time=00:30:00
-#SBATCH --output=logs/smoke_%j.out
-#SBATCH --error=logs/smoke_%j.err
+#SBATCH -N 1     
+#SBATCH -c 64
+#SBATCH --ntasks-per-node=1
+#SBATCH -t 00:15:00                  
+#SBATCH --gres=gpu:V100:1          
+#SBATCH --mem-per-gpu=32G
+#SBATCH -J nafnet_smoke    # jobs name
+#SBATCH -o ./logs/smoke_%j.out   # file to write logs, prints, etc
 
 mkdir -p logs
 
