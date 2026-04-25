@@ -9,7 +9,7 @@
 
 
 class VariantA:
-    """Variant A — GELU Gate"""
+    """Variant A: GELU Gate"""
 
     def __init__(self, opt: dict):
         raise NotImplementedError()

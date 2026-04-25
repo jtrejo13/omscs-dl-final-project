@@ -15,14 +15,14 @@ from torch.utils.data import Dataset
 
 
 def _read_lmdb_keys(lmdb_path: str) -> list[str]:
-    """Return sorted list of keys from an LMDB's meta_info.txt."""
+    """Return sorted list of keys from an LMDB's meta_info.txt"""
     meta = os.path.join(lmdb_path, 'meta_info.txt')
     with open(meta) as f:
         return sorted(line.split('.')[0] for line in f if line.strip())
 
 
 def _lmdb_decode(env: lmdb.Environment, key: str) -> np.ndarray:
-    """Read one image from an open LMDB env; return float32 HWC in [0, 1]."""
+    """Read one image from an open LMDB env; return float32 HWC in [0, 1]"""
     with env.begin(write=False) as txn:
         buf = txn.get(key.encode('ascii'))
     img = Image.open(io.BytesIO(buf)).convert('RGB')
@@ -30,12 +30,12 @@ def _lmdb_decode(env: lmdb.Environment, key: str) -> np.ndarray:
 
 
 def _to_tensor(img: np.ndarray) -> torch.Tensor:
-    """Convert HWC float32 numpy array to CHW float32 tensor."""
+    """Convert HWC float32 numpy array to CHW float32 tensor"""
     return torch.from_numpy(np.ascontiguousarray(img.transpose(2, 0, 1)))
 
 
 def paired_random_crop(img_lq: np.ndarray, img_gt: np.ndarray, patch_size: int) -> tuple:
-    """Paired random crop. Ported from NAFNet/basicsr/data/transforms.py."""
+    """Paired random crop. Ported from NAFNet/basicsr/data/transforms.py"""
     h, w = img_lq.shape[:2]
     if h < patch_size or w < patch_size:
         raise ValueError(
@@ -50,7 +50,7 @@ def paired_random_crop(img_lq: np.ndarray, img_gt: np.ndarray, patch_size: int) 
 
 
 def augment(imgs: list, hflip: bool = True, rotation: bool = True) -> list:
-    """Random horizontal flip and 90-degree rotations. Ported from NAFNet."""
+    """Random horizontal flip and 90-degree rotations. Ported from NAFNet/basicsr/data/transforms.py"""
     hflip = hflip and random.random() < 0.5
     vflip = rotation and random.random() < 0.5
     rot90 = rotation and random.random() < 0.5
@@ -70,7 +70,7 @@ def augment(imgs: list, hflip: bool = True, rotation: bool = True) -> list:
 class PairedImageDataset(Dataset):
     """Loads paired (LQ, GT) images from two LMDB databases.
 
-    LQ and GT images are matched by key — both LMDBs must have identical
+    LQ and GT images are matched by key, both LMDBs must have identical
     key sets (validated at init from their meta_info.txt files).
 
     Args:
@@ -108,8 +108,8 @@ class PairedImageDataset(Dataset):
             )
         self.keys = lq_keys
 
-        # Opened lazily in __getitem__ — LMDB envs cannot be shared across
-        # forked DataLoader worker processes.
+        # Opened lazily in __getitem__
+        # LMDB envs cannot be shared across forked DataLoader worker processes.
         self._lq_env: lmdb.Environment | None = None
         self._gt_env: lmdb.Environment | None = None
 

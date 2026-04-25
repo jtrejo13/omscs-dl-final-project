@@ -14,7 +14,7 @@ from utils import get_device
 class BaselineNAFNet:
     """NAFNet baseline for image denoising on SIDD.
 
-    Architecture: NAFNet (U-Net with NAFBlocks — SimpleGate + SCA + LayerNorm2d).
+    Architecture: NAFNet (U-Net with NAFBlocks: SimpleGate + SCA + LayerNorm2d).
     Loss: PSNRLoss (negative PSNR; minimizing it = maximizing PSNR).
     Optimizer: AdamW with iteration-based CosineAnnealingLR.
 
@@ -42,7 +42,7 @@ class BaselineNAFNet:
             self.net.parameters(), lr=lr, weight_decay=weight_decay, betas=betas
         )
 
-        # Iteration-based cosine annealing — scheduler.step() is called inside
+        # Iteration-based cosine annealing; scheduler.step() is called inside
         # optimize() so it advances once per iteration, not per epoch.
         scheduler_cfg = train_cfg.get("scheduler", {})
         t_max = int(scheduler_cfg.get("T_max", 400000))
