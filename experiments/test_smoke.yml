@@ -1,0 +1,21 @@
+name: nafnet_smoke
+model:
+  type: baseline
+  img_channel: 3
+  width: 32
+  enc_blk_nums: [1, 1, 1, 28]
+  middle_blk_num: 1
+  dec_blk_nums: [1, 1, 1, 1]
+path:
+  pretrain_model: results/nafnet_smoke/checkpoints/latest.pth
+datasets:
+  test:
+    type: PairedImage
+    lq_lmdb: data/SIDD/val/input_crops.lmdb
+    gt_lmdb: data/SIDD/val/gt_crops.lmdb
+    patch_size: 0
+    num_samples: 20
+    batch_size: 1
+    num_workers: 0
+    shuffle: false
+    pin_memory: false

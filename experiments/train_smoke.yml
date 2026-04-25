@@ -1,0 +1,45 @@
+name: nafnet_smoke
+model:
+  type: baseline
+  img_channel: 3
+  width: 32
+  enc_blk_nums: [1, 1, 1, 28]
+  middle_blk_num: 1
+  dec_blk_nums: [1, 1, 1, 1]
+datasets:
+  train:
+    type: PairedImage
+    lq_lmdb: data/SIDD/train_smoke/input_crops.lmdb
+    gt_lmdb: data/SIDD/train_smoke/gt_crops.lmdb
+    patch_size: 256
+    use_flip: false
+    use_rot:  false
+    batch_size: 8
+    num_workers: 0
+    shuffle: true
+    pin_memory: false
+  val:
+    type: PairedImage
+    lq_lmdb: data/SIDD/val/input_crops.lmdb
+    gt_lmdb: data/SIDD/val/gt_crops.lmdb
+    patch_size: 0
+    num_samples: 20
+    batch_size: 1
+    num_workers: 0
+    shuffle: false
+    pin_memory: false
+train:
+  lr: 1.0e-3
+  weight_decay: 0.0
+  betas: [0.9, 0.9]
+  use_grad_clip: true
+  epochs: 2
+  log_freq: 5
+  val_freq: 1
+  save_freq: 2
+  loss:
+    type: PSNRLoss
+    loss_weight: 1.0
+  scheduler:
+    T_max: 400000
+    eta_min: 1.0e-7
