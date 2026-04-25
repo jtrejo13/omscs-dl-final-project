@@ -4,7 +4,7 @@ prepare_sidd_train.py
 Download SIDD Medium, crop to 512×512 patches, and build the train LMDBs.
 
 Adapted from NAFNet/scripts/data_preparation/sidd.py (megvii-research/NAFNet).
-Removes the BasicSR and cv2 dependencies — uses PIL and lmdb directly.
+Removes the BasicSR and cv2 dependencies; uses PIL and lmdb directly.
 
 Steps
 -----
@@ -24,17 +24,18 @@ Output
 """
 
 import io
-import os
 import shutil
 from multiprocessing import Pool
 from pathlib import Path
 
 import lmdb
 import numpy as np
+import gdown
+
 from PIL import Image
 from tqdm import tqdm
 
-# ── Config ────────────────────────────────────────────────────────────────────
+# Config
 
 GDRIVE_ID = "1UHjWZzLPGweA9ZczmV8lFSRcIxqiOVJw"
 RAW_DIR   = Path("data/SIDD/raw")
@@ -50,35 +51,34 @@ PAIRS = [
     ("_GT",    Path("data/SIDD/train/gt_crops"),    Path("data/SIDD/train/gt_crops.lmdb")),
 ]
 
-# ── Step 1: Download ──────────────────────────────────────────────────────────
+# Step 1: Download
 
 def download():
     if any(RAW_DIR.rglob("*.PNG")):
-        print(f"Raw images found in {RAW_DIR} — skipping download.")
+        print(f"Raw images found in {RAW_DIR}; skipping download.")
         return
 
-    import gdown
     RAW_DIR.mkdir(parents=True, exist_ok=True)
     archive = RAW_DIR / "SIDD_Medium_Srgb.zip"
 
     if not archive.exists():
-        print("Downloading SIDD Medium (~70 GB) …")
+        print("Downloading SIDD Medium (~70 GB)…")
         url = f"https://drive.google.com/file/d/{GDRIVE_ID}/view"
         gdown.download(url=url, output=str(archive), quiet=False, fuzzy=True)
 
-    print("Extracting archive …")
+    print("Extracting archive…")
     shutil.unpack_archive(str(archive), str(RAW_DIR))
     print("Extraction done.")
 
-# ── Step 2: Crop ─────────────────────────────────────────────────────────────
+# Step 2: Crop
 
 def scan_sidd(root: Path, keyword: str) -> list[Path]:
-    """Return sorted list of PNG files whose name contains keyword."""
+    """Return sorted list of PNG files whose name contains keyword"""
     return sorted(p for p in root.rglob("*.PNG") if keyword in p.name)
 
 
 def _crop_worker(args):
-    """Crop a single image into 512×512 patches; save as PNG files."""
+    """Crop a single image into 512×512 patches; save as PNG files"""
     path, save_dir, keyword = args
     img = np.array(Image.open(path).convert("RGB"))
     h, w = img.shape[:2]
@@ -106,7 +106,7 @@ def _crop_worker(args):
 
 def crop_images(keyword: str, crops_dir: Path):
     if any(crops_dir.glob("*.png")):
-        print(f"Crops exist at {crops_dir} — skipping.")
+        print(f"Crops exist at {crops_dir}; skipping.")
         return
 
     imgs = scan_sidd(RAW_DIR, keyword)
@@ -117,12 +117,12 @@ def crop_images(keyword: str, crops_dir: Path):
         )
 
     crops_dir.mkdir(parents=True, exist_ok=True)
-    print(f"Cropping {len(imgs)} {keyword.strip('_')} images → {crops_dir} …")
+    print(f"Cropping {len(imgs)} {keyword.strip('_')} images --> {crops_dir}…")
     args = [(p, crops_dir, keyword) for p in imgs]
     with Pool(N_THREAD) as pool:
         list(tqdm(pool.imap_unordered(_crop_worker, args), total=len(imgs)))
 
-# ── Step 3: Build LMDB ───────────────────────────────────────────────────────
+# Step 3: Build LMDB
 
 def build_lmdb(crops_dir: Path, lmdb_path: Path):
     paths = sorted(crops_dir.glob("*.png"))
@@ -133,7 +133,7 @@ def build_lmdb(crops_dir: Path, lmdb_path: Path):
     sample = paths[0].read_bytes()
     map_size = len(sample) * len(paths) * 10
 
-    print(f"Building {lmdb_path}  ({len(paths):,} patches) …")
+    print(f"Building {lmdb_path}  ({len(paths):,} patches)…")
     env = lmdb.open(str(lmdb_path), map_size=map_size)
     meta_lines = []
     txn = env.begin(write=True)
@@ -159,7 +159,7 @@ def build_lmdb(crops_dir: Path, lmdb_path: Path):
 
     print(f"  → {lmdb_path}  ({len(paths):,} entries)")
 
-# ── Main ─────────────────────────────────────────────────────────────────────
+# Main
 
 def main():
     download()
@@ -169,11 +169,11 @@ def main():
 
     for keyword, crops_dir, lmdb_path in PAIRS:
         if lmdb_path.exists():
-            print(f"{lmdb_path} exists — skipping.")
+            print(f"{lmdb_path} exists; skipping.")
             continue
         build_lmdb(crops_dir, lmdb_path)
 
-    # Remove intermediate PNG crops — LMDBs are the only artifact we need.
+    # Remove intermediate PNG crops; LMDBs are the only artifact we need
     for _, crops_dir, _ in PAIRS:
         if crops_dir.exists():
             shutil.rmtree(crops_dir)
