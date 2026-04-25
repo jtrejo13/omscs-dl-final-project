@@ -1,11 +1,7 @@
 #!/bin/bash
 #SBATCH --job-name=nafnet_smoke
-#SBATCH --account=cs7643
 #SBATCH --partition=ice-gpu
-#SBATCH --nodes=1
-#SBATCH --ntasks=1
-#SBATCH --cpus-per-task=4
-#SBATCH --gres=gpu:A100:1
+#SBATCH --gres=gpu:1
 #SBATCH --mem=32G
 #SBATCH --time=00:30:00
 #SBATCH --output=logs/smoke_%j.out
