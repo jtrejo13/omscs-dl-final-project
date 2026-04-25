@@ -63,7 +63,8 @@ def download():
 
     if not archive.exists():
         print("Downloading SIDD Medium (~70 GB) …")
-        gdown.download(id=GDRIVE_ID, output=str(archive), quiet=False)
+        url = f"https://drive.google.com/file/d/{GDRIVE_ID}/view"
+        gdown.download(url=url, output=str(archive), quiet=False, fuzzy=True)
 
     print("Extracting archive …")
     shutil.unpack_archive(str(archive), str(RAW_DIR))
