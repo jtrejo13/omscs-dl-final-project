@@ -1,14 +1,13 @@
 name: phoenix
 channels:
   - pytorch
-  - nvidia
   - conda-forge
   - defaults
 dependencies:
   - python=3.10
   - pytorch>=2.0
   - torchvision>=0.15
-  - pytorch-cuda=11.8
+  - pytorch-cuda=12.1
   - pip
   - pip:
     - Pillow>=9.0
@@ -17,3 +16,6 @@ dependencies:
     - lmdb
     - gdown
     - tqdm
+    - wandb>=0.26.1
+    - huggingface_hub>=1.12.0
+    - hf_transfer>=0.1.9
