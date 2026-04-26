@@ -9,7 +9,7 @@
 
 
 class VariantB:
-    """Variant B — No SCA"""
+    """Variant B: No SCA"""
 
     def __init__(self, opt: dict):
         raise NotImplementedError()

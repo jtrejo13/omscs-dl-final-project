@@ -31,13 +31,17 @@ def build_dataloader(opt, phase="train"):
         )
     elif ds_type == "PairedImage":
         dataset = PairedImageDataset(
-            lq_dir=ds_cfg["lq_dir"],
-            gt_dir=ds_cfg.get("gt_dir", None),
+            lq_lmdb=ds_cfg["lq_lmdb"],
+            gt_lmdb=ds_cfg["gt_lmdb"],
             patch_size=int(ds_cfg.get("patch_size", 0)),
             use_flip=bool(ds_cfg.get("use_flip", False)),
             use_rot=bool(ds_cfg.get("use_rot", False)),
             phase=phase,
         )
+        num_samples = ds_cfg.get("num_samples")
+        if num_samples is not None:
+            n = min(int(num_samples), len(dataset))
+            dataset = torch.utils.data.Subset(dataset, range(n))
     else:
         raise ValueError(f"Unsupported dataset type: '{ds_type}'")
 

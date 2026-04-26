@@ -3,31 +3,29 @@
 # "Simple Baselines for Image Restoration", Chen et al., ECCV 2022
 # Copyright (c) 2022 megvii-model. All Rights Reserved.
 # ------------------------------------------------------------------------
+import io
 import os
 import random
 
+import lmdb
 import numpy as np
 import torch
 from PIL import Image
 from torch.utils.data import Dataset
 
 
-_IMG_EXTENSIONS = {".png", ".jpg", ".jpeg", ".tiff", ".bmp", ".PNG", ".JPG", ".JPEG"}
+def _read_lmdb_keys(lmdb_path: str) -> list[str]:
+    """Return sorted list of keys from an LMDB's meta_info.txt"""
+    meta = os.path.join(lmdb_path, 'meta_info.txt')
+    with open(meta) as f:
+        return sorted(line.split('.')[0] for line in f if line.strip())
 
 
-def scan_folder(folder: str) -> list[str]:
-    """Return sorted list of image paths in folder"""
-    paths = [
-        os.path.join(folder, f)
-        for f in sorted(os.listdir(folder))
-        if os.path.splitext(f)[1] in _IMG_EXTENSIONS
-    ]
-    return paths
-
-
-def _load_image(path: str) -> np.ndarray:
-    """Load image as numpy array in [0, 1]"""
-    img = Image.open(path).convert("RGB")
+def _lmdb_decode(env: lmdb.Environment, key: str) -> np.ndarray:
+    """Read one image from an open LMDB env; return float32 HWC in [0, 1]"""
+    with env.begin(write=False) as txn:
+        buf = txn.get(key.encode('ascii'))
+    img = Image.open(io.BytesIO(buf)).convert('RGB')
     return np.array(img, dtype=np.float32) / 255.0
 
 
@@ -37,33 +35,27 @@ def _to_tensor(img: np.ndarray) -> torch.Tensor:
 
 
 def paired_random_crop(img_lq: np.ndarray, img_gt: np.ndarray, patch_size: int) -> tuple:
-    """Paired random crop.
-
-    Ported from NAFNet/basicsr/data/transforms.py.
-    """
+    """Paired random crop. Ported from NAFNet/basicsr/data/transforms.py"""
     h, w = img_lq.shape[:2]
     if h < patch_size or w < patch_size:
         raise ValueError(
-            f"Image ({h}x{w}) is smaller than patch_size ({patch_size}). "
-            "Use a smaller patch_size or larger images."
+            f"Image ({h}x{w}) is smaller than patch_size ({patch_size})."
         )
     top = random.randint(0, h - patch_size)
     left = random.randint(0, w - patch_size)
-    img_lq = img_lq[top:top + patch_size, left:left + patch_size, :]
-    img_gt = img_gt[top:top + patch_size, left:left + patch_size, :]
-    return img_lq, img_gt
+    return (
+        img_lq[top:top + patch_size, left:left + patch_size, :],
+        img_gt[top:top + patch_size, left:left + patch_size, :],
+    )
 
 
 def augment(imgs: list, hflip: bool = True, rotation: bool = True) -> list:
-    """Apply random horizontal flip and 90-degree rotations.
-
-    Ported from NAFNet/basicsr/data/transforms.py.
-    """
+    """Random horizontal flip and 90-degree rotations. Ported from NAFNet/basicsr/data/transforms.py"""
     hflip = hflip and random.random() < 0.5
     vflip = rotation and random.random() < 0.5
     rot90 = rotation and random.random() < 0.5
 
-    def _augment_single(img):
+    def _aug(img):
         if hflip:
             img = img[:, ::-1, :].copy()
         if vflip:
@@ -72,90 +64,71 @@ def augment(imgs: list, hflip: bool = True, rotation: bool = True) -> list:
             img = img.transpose(1, 0, 2)
         return img
 
-    return [_augment_single(img) for img in imgs]
+    return [_aug(img) for img in imgs]
 
 
 class PairedImageDataset(Dataset):
-    """Dataset that loads paired (LQ, GT) images from two folders.
+    """Loads paired (LQ, GT) images from two LMDB databases.
 
-    LQ and GT images are paired by sorted position — filenames may differ
-    between the two directories (as in SIDD's input_crops / gt_crops layout).
+    LQ and GT images are matched by key, both LMDBs must have identical
+    key sets (validated at init from their meta_info.txt files).
 
-    Attributes:
-        lq_dir: Directory of degraded (noisy) images.
-        gt_dir: Directory of clean ground-truth images.
+    Args:
+        lq_lmdb: Path to the LQ (noisy) LMDB directory.
+        gt_lmdb: Path to the GT (clean) LMDB directory.
         patch_size: Random crop size during training. 0 = return full image.
-        use_flip: Enable random horizontal flip augmentation.
-        use_rot: Enable random rotation augmentation.
+        use_flip: Enable random horizontal flip (train phase only).
+        use_rot: Enable random rotation (train phase only).
         phase: 'train', 'val', or 'test'. Augmentation only applied for 'train'.
     """
 
     def __init__(
         self,
-        lq_dir: str,
-        gt_dir: str | None = None,
+        lq_lmdb: str,
+        gt_lmdb: str,
         patch_size: int = 0,
         use_flip: bool = False,
         use_rot: bool = False,
-        phase: str = "train",
+        phase: str = 'train',
     ):
         super().__init__()
+        self.lq_lmdb = lq_lmdb
+        self.gt_lmdb = gt_lmdb
         self.patch_size = patch_size
         self.use_flip = use_flip
         self.use_rot = use_rot
         self.phase = phase
 
-        self.lq_paths = scan_folder(lq_dir)
-        if not self.lq_paths:
-            raise ValueError(f"No images found in lq_dir: {lq_dir}")
-        
-        self.gt_paths = None
-        if gt_dir is not None:
-            self.gt_paths = scan_folder(gt_dir)
-            if len(self.gt_paths) != len(self.lq_paths):
-                raise ValueError(
-                    f"Number of LQ images ({len(self.lq_paths)}) does not match "
-                    f"GT images ({len(self.gt_paths)}) in {gt_dir}"
-                )
+        lq_keys = _read_lmdb_keys(lq_lmdb)
+        gt_keys = _read_lmdb_keys(gt_lmdb)
+        if lq_keys != gt_keys:
+            raise ValueError(
+                f"LQ and GT LMDB key sets do not match.\n"
+                f"  LQ: {lq_lmdb}\n  GT: {gt_lmdb}"
+            )
+        self.keys = lq_keys
+
+        # Opened lazily in __getitem__
+        # LMDB envs cannot be shared across forked DataLoader worker processes.
+        self._lq_env: lmdb.Environment | None = None
+        self._gt_env: lmdb.Environment | None = None
 
     def __len__(self) -> int:
-        return len(self.lq_paths)
+        return len(self.keys)
 
     def __getitem__(self, idx: int) -> dict:
-        lq_path = self.lq_paths[idx]
-        lq = _load_image(lq_path)
+        if self._lq_env is None:
+            self._lq_env = lmdb.open(self.lq_lmdb, readonly=True, lock=False, readahead=False)
+            self._gt_env = lmdb.open(self.gt_lmdb, readonly=True, lock=False, readahead=False)
 
-        gt = None
-        if self.gt_paths is not None:
-            gt = _load_image(self.gt_paths[idx])
+        key = self.keys[idx]
+        lq = _lmdb_decode(self._lq_env, key)
+        gt = _lmdb_decode(self._gt_env, key)
 
-        # Random crop
-        # Note: This is part of training only
-        if self.patch_size > 0 and self.phase == "train":
-            if gt is not None:
-                lq, gt = paired_random_crop(lq, gt, self.patch_size)
-            else:
-                h, w = lq.shape[:2]
-                if h < self.patch_size or w < self.patch_size:
-                    raise ValueError(
-                        f"Image ({h}x{w}) is smaller than patch_size ({self.patch_size}). "
-                        "Use a smaller patch_size or larger images."
-                    )
-                top = random.randint(0, h - self.patch_size)
-                left = random.randint(0, w - self.patch_size)
-                lq = lq[top:top + self.patch_size, left:left + self.patch_size, :]
+        if self.patch_size > 0 and self.phase == 'train':
+            lq, gt = paired_random_crop(lq, gt, self.patch_size)
 
-        # Augmentation
-        # Note: This is part of training only
-        if self.phase == "train" and (self.use_flip or self.use_rot):
-            if gt is not None:
-                lq, gt = augment([lq, gt], hflip=self.use_flip, rotation=self.use_rot)
-            else:
-                lq = augment([lq], hflip=self.use_flip, rotation=self.use_rot)[0]
+        if self.phase == 'train' and (self.use_flip or self.use_rot):
+            lq, gt = augment([lq, gt], hflip=self.use_flip, rotation=self.use_rot)
 
-        out = {"lq": _to_tensor(lq), "path": lq_path}
-
-        if gt is not None:
-            out["gt"] = _to_tensor(gt)
-
-        return out
+        return {'lq': _to_tensor(lq), 'gt': _to_tensor(gt), 'path': key}

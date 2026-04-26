@@ -14,3 +14,6 @@ dependencies:
     - Pillow>=9.0
     - PyYAML>=6.0
     - lpips>=0.1.4
+    - lmdb
+    - gdown
+    - tqdm

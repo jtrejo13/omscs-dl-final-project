@@ -68,7 +68,7 @@ def test(opt: dict, save_images: bool = False):
     if ckpt_path:
         model.load(ckpt_path)
     else:
-        print("[Warning] No checkpoint path specified — using random weights.")
+        print("[Warning] No checkpoint path specified; using random weights.")
 
     psnr_meter = AverageMeter("PSNR")
     ssim_meter = AverageMeter("SSIM")
@@ -76,7 +76,7 @@ def test(opt: dict, save_images: bool = False):
     lpips_fn = build_lpips_fn(net="alex", device=get_device())
     lpips_meter = AverageMeter("LPIPS")
     if lpips_fn is None:
-        print("[Warning] lpips not installed — LPIPS will be skipped.")
+        print("[Warning] lpips not installed; LPIPS will be skipped.")
     per_sample_results = []
 
     print(f"\n{'='*60}")

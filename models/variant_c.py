@@ -8,7 +8,7 @@
 
 
 class VariantC:
-    """Variant C — BatchNorm"""
+    """Variant C: BatchNorm"""
 
     def __init__(self, opt: dict):
         raise NotImplementedError()
