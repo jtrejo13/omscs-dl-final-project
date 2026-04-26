@@ -179,6 +179,68 @@ print(f'ok; {sum(p.numel() for p in m.net.parameters()):,} params')
 sbatch jobs/train_variant_x.sh
 ```
 
+## Running on Vast.ai
+
+End-to-end guide for running a variant on a rented GPU instance.
+
+### Accounts needed
+
+| Service | Purpose | Notes |
+|---|---|---|
+| [vast.ai](https://vast.ai) | Rented GPU | Create a free account, add $5–$10 credit |
+| [wandb.ai](https://wandb.ai) | Metric tracking | Get team API key |
+| [huggingface.co](https://huggingface.co) | Dataset + checkpoint storage | Use HF token |
+
+### 1. Rent an instance
+
+1. Go to [vast.ai/create](https://vast.ai/create)
+2. Set filters: **GPU = RTX 3090**, **GPU RAM ≥ 20 GB**, **Disk = 150 GB**
+3. Docker image can be `vastai/pytorch` with a **CUDA 12.1+** tag
+4. Expand **Environment Variables** and add:
+   ```
+   WANDB_API_KEY=<your key from wandb.ai/settings>
+   HF_TOKEN=<token from huggingface.co/settings/tokens with write access>
+   ```
+   We still need to confirm this.
+5. Click **Rent** and wait for status to show **Running**
+6. Click **Connect** and copy the SSH command, then connect:
+   ```bash
+   ssh -p <port> root@<ip>
+   ```
+
+### 2. Set up the instance
+
+```bash
+git clone -b <my-branch> https://github.com/jtrejo13/omscs-dl-final-project omscs-dl-final-project
+cd omscs-dl-final-project
+bash setup.sh
+```
+
+### 3. Run variant
+
+For **Variant A**:
+```bash
+python train.py --opt experiments/train_variant_a.yml
+python test.py  --opt experiments/test_variant_a.yml
+```
+
+### 4. Save results
+
+`test.py` automatically uploads `latest.pth` and `results.json` to HuggingFace when it finishes. If it fails, run manually:
+
+```bash
+# Replace nafnet_sidd_variant_b with nafnet_sidd_variant_c as needed
+hf upload cdtrejo/nafnet-sidd-checkpoints results/nafnet_sidd_variant_b/checkpoints/latest.pth nafnet_sidd_variant_b/latest.pth --repo-type model
+
+hf upload cdtrejo/nafnet-sidd-checkpoints results/nafnet_sidd_variant_b/results.json nafnet_sidd_variant_b/results.json --repo-type model
+```
+
+Results for all models will appear at `huggingface.co/cdtrejo/nafnet-sidd-checkpoints`.
+
+### 5. Destroy the instance
+
+Once results are uploaded, destroy the instance from the Vast.ai dashboard to stop billing.
+
 ## Local Development
 
 ```bash
