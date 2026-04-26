@@ -10,9 +10,10 @@
 
 mkdir -p logs
 
-cd /storage/ice-shared/cs7643/shared-group-project-data/phoenix/omscs-dl-final-project
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+cd "$(dirname "$SCRIPT_DIR")"
 
-conda activate phoenix
+conda activate phoenix 2>/dev/null || true
 
 python train.py --opt experiments/train_smoke.yml
 python test.py  --opt experiments/test_smoke.yml
