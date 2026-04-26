@@ -1,33 +1,13 @@
-# ------------------------------------------------------------------------
-# Variant A: GELU Gate
-#
-# Spec:
-#   - Replace SimpleGate's activation-free gate (x1 * x2) with a GELU-gated
-#     variant (x1 * F.gelu(x2)) inside NAFBlock.
-#   - To test the role of the nonlinear activation in the gating mechanism.
-# ------------------------------------------------------------------------
+from models.baseline_nafnet import BaselineNAFNet
+from models.archs.nafnet_arch import NAFBlockA
 
 
-class VariantA:
-    """Variant A: GELU Gate"""
+class VariantA(BaselineNAFNet):
+    """Variant A: GELU gate (x1 * gelu(x2)) instead of SimpleGate (x1 * x2).
+
+    Tests whether a nonlinear activation in the gating mechanism
+    improves over the activation-free baseline.
+    """
 
     def __init__(self, opt: dict):
-        raise NotImplementedError()
-
-    def feed_data(self, data):
-        raise NotImplementedError
-
-    def optimize(self):
-        raise NotImplementedError
-
-    def test(self):
-        raise NotImplementedError
-
-    def get_current_visuals(self):
-        raise NotImplementedError
-
-    def save(self, path):
-        raise NotImplementedError
-
-    def load(self, path):
-        raise NotImplementedError
+        super().__init__(opt, block_cls=NAFBlockA)

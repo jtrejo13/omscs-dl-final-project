@@ -26,6 +26,12 @@ class SimpleGate(nn.Module):
         return x1 * x2
 
 
+class GELUGate(nn.Module):
+    def forward(self, x):
+        x1, x2 = x.chunk(2, dim=1)
+        return x1 * F.gelu(x2)
+
+
 class NAFBlock(nn.Module):
     def __init__(self, c, DW_Expand=2, FFN_Expand=2, drop_out_rate=0.):
         super().__init__()
@@ -82,10 +88,20 @@ class NAFBlock(nn.Module):
         return y + x * self.gamma
 
 
+class NAFBlockA(NAFBlock):
+    """Variant A: GELU gate (x1 * gelu(x2)) instead of SimpleGate (x1 * x2)."""
+    def __init__(self, c, DW_Expand=2, FFN_Expand=2, drop_out_rate=0.):
+        super().__init__(c, DW_Expand, FFN_Expand, drop_out_rate)
+        self.sg = GELUGate()
+
+
 class NAFNet(nn.Module):
 
-    def __init__(self, img_channel=3, width=16, middle_blk_num=1, enc_blk_nums=[], dec_blk_nums=[]):
+    def __init__(self, img_channel=3, width=16, middle_blk_num=1, enc_blk_nums=[], dec_blk_nums=[], block_cls=None):
         super().__init__()
+
+        if block_cls is None:
+            block_cls = NAFBlock
 
         self.intro = nn.Conv2d(in_channels=img_channel, out_channels=width, kernel_size=3, padding=1, stride=1, groups=1,
                               bias=True)
@@ -102,7 +118,7 @@ class NAFNet(nn.Module):
         for num in enc_blk_nums:
             self.encoders.append(
                 nn.Sequential(
-                    *[NAFBlock(chan) for _ in range(num)]
+                    *[block_cls(chan) for _ in range(num)]
                 )
             )
             self.downs.append(
@@ -112,7 +128,7 @@ class NAFNet(nn.Module):
 
         self.middle_blks = \
             nn.Sequential(
-                *[NAFBlock(chan) for _ in range(middle_blk_num)]
+                *[block_cls(chan) for _ in range(middle_blk_num)]
             )
 
         for num in dec_blk_nums:
@@ -125,7 +141,7 @@ class NAFNet(nn.Module):
             chan = chan // 2
             self.decoders.append(
                 nn.Sequential(
-                    *[NAFBlock(chan) for _ in range(num)]
+                    *[block_cls(chan) for _ in range(num)]
                 )
             )
 
