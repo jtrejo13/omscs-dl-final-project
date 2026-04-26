@@ -18,11 +18,41 @@ The script will:
 
 import argparse
 import os
+import pathlib
 import time
 
 from data import build_dataloader
 from models import build_model
 from utils import load_config, compute_psnr, compute_ssim, AverageMeter
+
+_WANDB_DISABLED = os.environ.get("WANDB_DISABLED", "false").lower() in ("1", "true", "yes")
+try:
+    if _WANDB_DISABLED:
+        raise ImportError
+    import wandb
+    _WANDB_AVAILABLE = True
+except ImportError:
+    wandb = None
+    _WANDB_AVAILABLE = False
+
+
+def _wandb_init(opt: dict) -> bool:
+    if not _WANDB_AVAILABLE:
+        return False
+    has_key = bool(os.environ.get("WANDB_API_KEY"))
+    netrc = pathlib.Path.home() / ".netrc"
+    has_netrc = netrc.exists() and "wandb" in netrc.read_text()
+    if not (has_key or has_netrc):
+        print("[W&B] No credentials; run `wandb login` or set WANDB_API_KEY. Skipping.")
+        return False
+    wandb.init(
+        project=os.environ.get("WANDB_PROJECT", "nafnet-sidd"),
+        name=opt.get("name", "experiment"),
+        config={"model": opt.get("model", {}), "train": opt.get("train", {})},
+        resume="allow",
+    )
+    print(f"[W&B] {wandb.run.url}")
+    return True
 
 
 def parse_args():
@@ -57,6 +87,7 @@ def train(opt: dict):
     exp_name = opt.get("name", "experiment")
     ckpt_dir = os.path.join("results", exp_name, "checkpoints")
     os.makedirs(ckpt_dir, exist_ok=True)
+    use_wandb = _wandb_init(opt)
 
     train_loader = build_dataloader(opt, phase="train")
     val_loader = build_dataloader(opt, phase="val")
@@ -101,6 +132,8 @@ def train(opt: dict):
                     f"iter {global_iter:>6}]  "
                     f"loss={loss_meter.avg:.5f}"
                 )
+                if use_wandb:
+                    wandb.log({"train/loss": loss_meter.avg}, step=global_iter)
 
         epoch_time = time.time() - epoch_start
         print(
@@ -108,6 +141,8 @@ def train(opt: dict):
             f"avg_loss={loss_meter.avg:.5f}  "
             f"time={epoch_time:.1f}s"
         )
+        if use_wandb:
+            wandb.log({"epoch/loss": loss_meter.avg, "epoch/time_s": epoch_time, "epoch": epoch}, step=global_iter)
 
         if epoch % val_freq == 0:
             val_metrics = validate(model, val_loader)
@@ -115,12 +150,16 @@ def train(opt: dict):
                 f"  >>> Val   PSNR={val_metrics['psnr']:.2f} dB  "
                 f"SSIM={val_metrics['ssim']:.4f}"
             )
+            if use_wandb:
+                wandb.log({"val/psnr": val_metrics["psnr"], "val/ssim": val_metrics["ssim"], "epoch": epoch}, step=global_iter)
 
         if epoch % save_freq == 0:
             ckpt_path = os.path.join(ckpt_dir, f"epoch_{epoch:04d}.pth")
             model.save(ckpt_path)
 
     model.save(os.path.join(ckpt_dir, "latest.pth"))
+    if use_wandb:
+        wandb.finish()
     print("\nTraining complete.")
 
 

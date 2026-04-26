@@ -21,6 +21,7 @@ import argparse
 import datetime
 import json
 import os
+import pathlib
 
 from torchvision.utils import save_image
 
@@ -35,6 +36,54 @@ from utils import (
     AverageMeter,
     get_device,
 )
+
+HF_MODEL_REPO = "cdtrejo/nafnet-sidd-checkpoints"
+
+_WANDB_DISABLED = os.environ.get("WANDB_DISABLED", "false").lower() in ("1", "true", "yes")
+try:
+    if _WANDB_DISABLED:
+        raise ImportError
+    import wandb
+    _WANDB_AVAILABLE = True
+except ImportError:
+    wandb = None
+    _WANDB_AVAILABLE = False
+
+
+def _wandb_active() -> bool:
+    if not _WANDB_AVAILABLE:
+        return False
+    has_key = bool(os.environ.get("WANDB_API_KEY"))
+    netrc = pathlib.Path.home() / ".netrc"
+    has_netrc = netrc.exists() and "wandb" in netrc.read_text()
+    return has_key or has_netrc
+
+
+def _upload_to_hf(exp_name: str, ckpt_path: str, results_path: str) -> None:
+    try:
+        from huggingface_hub import HfApi
+    except ImportError:
+        print("[HF] huggingface_hub not installed; skipping upload.")
+        return
+
+    api = HfApi()
+    try:
+        print(f"[HF] Uploading to {HF_MODEL_REPO}/{exp_name}/...")
+        api.upload_file(
+            path_or_fileobj=ckpt_path,
+            path_in_repo=f"{exp_name}/latest.pth",
+            repo_id=HF_MODEL_REPO,
+            repo_type="model",
+        )
+        api.upload_file(
+            path_or_fileobj=results_path,
+            path_in_repo=f"{exp_name}/results.json",
+            repo_id=HF_MODEL_REPO,
+            repo_type="model",
+        )
+        print(f"[HF] Upload complete: huggingface.co/{HF_MODEL_REPO}")
+    except Exception as e:
+        print(f"[HF] Upload failed: {e}")
 
 
 def parse_args():
@@ -155,6 +204,25 @@ def test(opt: dict, save_images: bool = False):
         with open(results_path, "w") as f:
             json.dump(payload, f, indent=2)
         print(f"  Saved results: {results_path}")
+
+        # Log final metrics to W&B
+        if _wandb_active():
+            wandb.init(
+                project=os.environ.get("WANDB_PROJECT", "nafnet-sidd"),
+                name=exp_name,
+                resume="allow",
+            )
+            wandb.summary["test/psnr"] = payload["metrics"]["psnr_avg"]
+            wandb.summary["test/ssim"] = payload["metrics"]["ssim_avg"]
+            if payload["metrics"]["lpips_avg"] is not None:
+                wandb.summary["test/lpips"] = payload["metrics"]["lpips_avg"]
+            wandb.finish()
+            print("[W&B] Test metrics logged.")
+
+        # Upload checkpoint + results to HuggingFace
+        ckpt_path = os.path.join("results", exp_name, "checkpoints", "latest.pth")
+        if os.path.exists(ckpt_path):
+            _upload_to_hf(exp_name, ckpt_path, results_path)
 
     if save_images:
         print(f"  Saved outputs: {result_dir}\n")
