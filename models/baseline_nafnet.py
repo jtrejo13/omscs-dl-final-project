@@ -21,7 +21,7 @@ class BaselineNAFNet:
     Logged loss values will be small negatives (e.g. -38.0 ≈ 38 dB PSNR).
     """
 
-    def __init__(self, opt: dict):
+    def __init__(self, opt: dict, block_cls=None):
         self.opt = opt
         self.device = torch.device(get_device())
 
@@ -32,6 +32,7 @@ class BaselineNAFNet:
             middle_blk_num=net_cfg.get("middle_blk_num", 12),
             enc_blk_nums=net_cfg.get("enc_blk_nums", [2, 2, 4, 8]),
             dec_blk_nums=net_cfg.get("dec_blk_nums", [2, 2, 2, 2]),
+            block_cls=block_cls,
         ).to(self.device)
 
         train_cfg = opt.get("train", {})
