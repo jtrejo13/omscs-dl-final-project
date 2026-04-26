@@ -1,0 +1,44 @@
+name: nafnet_sidd_variant_a
+model:
+  type: variant_a
+  img_channel: 3
+  width: 32
+  enc_blk_nums: [1, 1, 1, 28]
+  middle_blk_num: 1
+  dec_blk_nums: [1, 1, 1, 1]
+datasets:
+  train:
+    type: PairedImage
+    lq_lmdb: data/SIDD/train/input_crops.lmdb
+    gt_lmdb: data/SIDD/train/gt_crops.lmdb
+    patch_size: 256
+    use_flip: false
+    use_rot:  false
+    batch_size: 8
+    num_workers: 4
+    shuffle: true
+    pin_memory: true
+  val:
+    type: PairedImage
+    lq_lmdb: data/SIDD/val/input_crops.lmdb
+    gt_lmdb: data/SIDD/val/gt_crops.lmdb
+    patch_size: 0
+    batch_size: 1
+    num_workers: 0
+    shuffle: false
+    pin_memory: false
+train:
+  lr: 1.0e-3
+  weight_decay: 0.0
+  betas: [0.9, 0.9]
+  use_grad_clip: true
+  epochs: 15
+  log_freq: 200
+  val_freq: 5
+  save_freq: 5
+  loss:
+    type: PSNRLoss
+    loss_weight: 1.0
+  scheduler:
+    T_max: 57390
+    eta_min: 1.0e-7
