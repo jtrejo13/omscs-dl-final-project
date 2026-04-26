@@ -32,13 +32,13 @@ train:
   weight_decay: 0.0
   betas: [0.9, 0.9]
   use_grad_clip: true
-  epochs: 30
+  epochs: 15
   log_freq: 200
   val_freq: 5
-  save_freq: 10
+  save_freq: 5
   loss:
     type: PSNRLoss
     loss_weight: 1.0
   scheduler:
-    T_max: 114780
+    T_max: 57390
     eta_min: 1.0e-7
