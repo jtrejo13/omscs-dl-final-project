@@ -1,0 +1,91 @@
+_wandb:
+    value:
+        cli_version: 0.26.1
+        e:
+            04f8ii4z21koq5pmtz7idpzbc14qicl9:
+                args:
+                    - --opt
+                    - experiments/train_variant_a.yml
+                codePath: train.py
+                codePathLocal: train.py
+                cpu_count: 40
+                cpu_count_logical: 80
+                cudaVersion: "13.0"
+                disk:
+                    /:
+                        total: "166429982720"
+                        used: "47843098624"
+                email: ctrjmtz@gmail.com
+                executable: /venv/phoenix/bin/python
+                git:
+                    commit: 8b9a468ee1854b82f1f472caf05213a1bc5c1ee1
+                    remote: https://github.com/jtrejo13/omscs-dl-final-project
+                gpu: NVIDIA GeForce RTX 3090
+                gpu_count: 1
+                gpu_nvidia:
+                    - architecture: Ampere
+                      cudaCores: 10496
+                      memoryTotal: "25769803776"
+                      name: NVIDIA GeForce RTX 3090
+                      uuid: GPU-18da77e3-3e23-e8ef-0e06-fc8739661286
+                host: b7e349ae49a8
+                memory:
+                    total: "337959763968"
+                os: Linux-6.8.0-94-generic-x86_64-with-glibc2.39
+                program: /workspace/omscs-dl-final-project/train.py
+                python: CPython 3.10.20
+                root: /workspace/omscs-dl-final-project
+                startedAt: "2026-04-26T23:44:27.173985Z"
+                writerId: 04f8ii4z21koq5pmtz7idpzbc14qicl9
+        m: []
+        python_version: 3.10.20
+        t:
+            "1":
+                - 1
+                - 41
+            "2":
+                - 1
+                - 41
+            "3":
+                - 2
+                - 13
+                - 16
+                - 61
+            "4": 3.10.20
+            "5": 0.26.1
+            "12": 0.26.1
+            "13": linux-x86_64
+model:
+    value:
+        dec_blk_nums:
+            - 1
+            - 1
+            - 1
+            - 1
+        enc_blk_nums:
+            - 1
+            - 1
+            - 1
+            - 28
+        img_channel: 3
+        middle_blk_num: 1
+        type: variant_a
+        width: 32
+train:
+    value:
+        betas:
+            - 0.9
+            - 0.9
+        epochs: 15
+        log_freq: 200
+        loss:
+            loss_weight: 1
+            type: PSNRLoss
+        lr: 0.001
+        save_freq: 5
+        scheduler:
+            T_max: 57390
+            eta_min: 1e-07
+        use_grad_clip: true
+        val_freq: 5
+        weight_decay: 0

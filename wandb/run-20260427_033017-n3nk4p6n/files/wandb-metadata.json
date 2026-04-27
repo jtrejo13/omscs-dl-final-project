@@ -1,0 +1,21 @@
+{
+  "os":  "Linux-6.8.0-94-generic-x86_64-with-glibc2.39",
+  "python":  "CPython 3.10.20",
+  "startedAt":  "2026-04-27T03:30:17.444213Z",
+  "args":  [
+    "--opt",
+    "experiments/test_variant_a.yml"
+  ],
+  "program":  "/workspace/omscs-dl-final-project/test.py",
+  "codePath":  "test.py",
+  "codePathLocal":  "test.py",
+  "git":  {
+    "remote":  "https://github.com/jtrejo13/omscs-dl-final-project",
+    "commit":  "8b9a468ee1854b82f1f472caf05213a1bc5c1ee1"
+  },
+  "email":  "ctrjmtz@gmail.com",
+  "root":  "/workspace/omscs-dl-final-project",
+  "host":  "b7e349ae49a8",
+  "executable":  "/venv/phoenix/bin/python",
+  "writerId":  "j5j6hmsj9p2m3rmq5uwm51c2ewdy7mrw"
+}
