@@ -23,7 +23,8 @@ import json
 import os
 import pathlib
 
-from torchvision.utils import save_image
+import torch
+from torchvision.utils import save_image, make_grid
 
 from data import build_dataloader
 from models import build_model
@@ -97,12 +98,18 @@ def parse_args():
     parser.add_argument(
         "--save_images",
         action="store_true",
-        help="Save output images to results/<name>/images/",
+        help="Save noisy/restored/gt comparison grids to results/<name>/images/",
+    )
+    parser.add_argument(
+        "--num_save",
+        type=int,
+        default=20,
+        help="Number of comparison grids to save (default: 20)",
     )
     return parser.parse_args()
 
 
-def test(opt: dict, save_images: bool = False):
+def test(opt: dict, save_images: bool = False, num_save: int = 20):
     exp_name = opt.get("name", "experiment")
     result_dir = os.path.join("results", exp_name, "images")
     if save_images:
@@ -168,16 +175,21 @@ def test(opt: dict, save_images: bool = False):
                 }
             )
 
-        if save_images:
+        if save_images and idx < num_save:
+            lq = visuals.get("lq", torch.zeros_like(pred))
+            gt_vis = visuals.get("gt", torch.zeros_like(pred))
             for b in range(pred.shape[0]):
-                fname = (
-                    os.path.basename(str(paths[b]))
+                stem = (
+                    os.path.splitext(os.path.basename(str(paths[b])))[0]
                     if b < len(paths)
-                    else f"sample_{idx}_{b}.png"
+                    else f"sample_{idx}_{b}"
                 )
-
-                fname = os.path.splitext(fname)[0] + ".png"
-                save_image(pred[b], os.path.join(result_dir, fname))
+                # side-by-side grid: noisy | restored | ground truth
+                grid = make_grid(
+                    [lq[b].clamp(0, 1), pred[b].clamp(0, 1), gt_vis[b].clamp(0, 1)],
+                    nrow=3, padding=4, pad_value=1.0
+                )
+                save_image(grid, os.path.join(result_dir, f"{stem}_compare.png"))
 
     if psnr_meter.count > 0:
         avg_lpips = lpips_meter.avg if lpips_meter.count > 0 else None
@@ -233,4 +245,4 @@ def test(opt: dict, save_images: bool = False):
 if __name__ == "__main__":
     args = parse_args()
     opt = load_config(args.opt)
-    test(opt, save_images=args.save_images)
+    test(opt, save_images=args.save_images, num_save=args.num_save)
