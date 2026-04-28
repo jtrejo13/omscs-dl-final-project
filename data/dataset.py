@@ -19,7 +19,7 @@ class SyntheticNoisyDataset(Dataset):
         return {"lq": lq, "gt": gt, "path": f"synthetic_{idx}"}
 
 
-def build_dataloader(opt, phase="train"):
+def build_dataloader(opt, phase="train", worker_init_fn=None, generator=None):
     ds_cfg = opt.get("datasets", {}).get(phase, {})
     ds_type = ds_cfg.get("type", "Synthetic")
 
@@ -37,6 +37,9 @@ def build_dataloader(opt, phase="train"):
             use_flip=bool(ds_cfg.get("use_flip", False)),
             use_rot=bool(ds_cfg.get("use_rot", False)),
             phase=phase,
+            split=ds_cfg.get("split", "all"),
+            split_ratio=float(ds_cfg.get("split_ratio", 0.8)),
+            split_seed=int(ds_cfg.get("split_seed", 42)),
         )
         num_samples = ds_cfg.get("num_samples")
         if num_samples is not None:
@@ -52,4 +55,6 @@ def build_dataloader(opt, phase="train"):
         num_workers=int(ds_cfg.get("num_workers", 0)),
         pin_memory=bool(ds_cfg.get("pin_memory", torch.cuda.is_available())),
         drop_last=phase == "train",
+        worker_init_fn=worker_init_fn,
+        generator=generator,
     )

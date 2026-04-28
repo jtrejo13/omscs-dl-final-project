@@ -27,18 +27,31 @@ datasets:
     num_workers: 0
     shuffle: false
     pin_memory: false
+    # 80/20 deterministic split of the SIDD val LMDB (1280 patches).
+    # Train-time val sees the 'val' side (~1024); test.py sees the disjoint
+    # 'test' side (~256). Keep split_ratio + split_seed identical across
+    # every train/test config so all variants are scored on the same patches.
+    split: val
+    split_ratio: 0.8
+    split_seed: 42
 train:
+  seed: 42
   lr: 1.0e-3
   weight_decay: 0.0
   betas: [0.9, 0.9]
   use_grad_clip: true
-  epochs: 15
+  epochs: 80
   log_freq: 200
   val_freq: 5
   save_freq: 5
+  # Abort the run if this many consecutive iterations produce NaN/Inf loss.
+  # Single bad batches are skipped silently; sustained NaN means corruption.
+  nan_abort_threshold: 50
   loss:
     type: PSNRLoss
     loss_weight: 1.0
   scheduler:
-    T_max: 57390
+    # T_max is auto-computed from epochs * iters_per_epoch at startup.
+    # Do not hardcode it; CosineAnnealingLR oscillates past T_max and
+    # silently corrupts long runs if epochs is changed without updating it.
     eta_min: 1.0e-7
