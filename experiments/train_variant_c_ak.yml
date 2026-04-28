@@ -1,0 +1,57 @@
+name: nafnet_sidd_variant_c_ak
+model:
+  type: variant_c
+  img_channel: 3
+  width: 32
+  enc_blk_nums: [1, 1, 1, 28]
+  middle_blk_num: 1
+  dec_blk_nums: [1, 1, 1, 1]
+datasets:
+  train:
+    type: PairedImage
+    lq_lmdb: data/SIDD/train/input_crops.lmdb
+    gt_lmdb: data/SIDD/train/gt_crops.lmdb
+    patch_size: 256
+    use_flip: false
+    use_rot:  false
+    batch_size: 8
+    num_workers: 4
+    shuffle: true
+    pin_memory: true
+  val:
+    type: PairedImage
+    lq_lmdb: data/SIDD/val/input_crops.lmdb
+    gt_lmdb: data/SIDD/val/gt_crops.lmdb
+    patch_size: 0
+    batch_size: 1
+    num_workers: 0
+    shuffle: false
+    pin_memory: false
+    # 80/20 deterministic split of the SIDD val LMDB (1280 patches).
+    # Train-time val sees the 'val' side (~1024); test.py sees the disjoint
+    # 'test' side (~256). Keep split_ratio + split_seed identical across
+    # every train/test config so all variants are scored on the same patches.
+    split: val
+    split_ratio: 0.8
+    split_seed: 42
+train:
+  seed: 42
+  lr: 1.0e-3
+  weight_decay: 0.0
+  betas: [0.9, 0.9]
+  use_grad_clip: true
+  epochs: 80
+  log_freq: 200
+  val_freq: 5
+  save_freq: 5
+  # Abort the run if this many consecutive iterations produce NaN/Inf loss.
+  # Single bad batches are skipped silently; sustained NaN means corruption.
+  nan_abort_threshold: 50
+  loss:
+    type: PSNRLoss
+    loss_weight: 1.0
+  scheduler:
+    # T_max is auto-computed from epochs * iters_per_epoch at startup.
+    # Do not hardcode it; CosineAnnealingLR oscillates past T_max and
+    # silently corrupts long runs if epochs is changed without updating it.
+    eta_min: 1.0e-7
