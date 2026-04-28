@@ -95,6 +95,43 @@ class NAFBlockA(NAFBlock):
         self.sg = GELUGate()
 
 
+class NAFBlockB(NAFBlock):
+    """Variant B: SCA (Simplified Channel Attention) removed entirely."""
+    def __init__(self, c, DW_Expand=2, FFN_Expand=2, drop_out_rate=0.):
+        super().__init__(c, DW_Expand, FFN_Expand, drop_out_rate)
+        del self.sca
+
+    def forward(self, inp):
+        x = inp
+
+        x = self.norm1(x)
+
+        x = self.conv1(x)
+        x = self.conv2(x)
+        x = self.sg(x)
+        x = self.conv3(x)
+
+        x = self.dropout1(x)
+
+        y = inp + x * self.beta
+
+        x = self.conv4(self.norm2(y))
+        x = self.sg(x)
+        x = self.conv5(x)
+
+        x = self.dropout2(x)
+
+        return y + x * self.gamma
+
+
+class NAFBlockC(NAFBlock):
+    """Variant C: nn.BatchNorm2d in place of LayerNorm2d for norm1/norm2."""
+    def __init__(self, c, DW_Expand=2, FFN_Expand=2, drop_out_rate=0.):
+        super().__init__(c, DW_Expand, FFN_Expand, drop_out_rate)
+        self.norm1 = nn.BatchNorm2d(c)
+        self.norm2 = nn.BatchNorm2d(c)
+
+
 class NAFNet(nn.Module):
 
     def __init__(self, img_channel=3, width=16, middle_blk_num=1, enc_blk_nums=[], dec_blk_nums=[], block_cls=None):
