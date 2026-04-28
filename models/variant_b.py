@@ -1,33 +1,13 @@
-# ------------------------------------------------------------------------
-# Variant B: No SCA (Simplified Channel Attention)
-#
-# Spec:
-#   - Remove the SCA module from NAFBlock entirely.
-#   - Delete self.sca in __init__ and remove `x = x * self.sca(x)` from forward to measure
-#     the contribution of channel attention to denoising quality.
-# ------------------------------------------------------------------------
+from models.baseline_nafnet import BaselineNAFNet
+from models.archs.nafnet_arch import NAFBlockB
 
 
-class VariantB:
-    """Variant B: No SCA"""
+class VariantB(BaselineNAFNet):
+    """Variant B: SCA removed.
+
+    Tests how much the Simplified Channel Attention contributes to
+    denoising quality by ablating it from the baseline NAFBlock.
+    """
 
     def __init__(self, opt: dict):
-        raise NotImplementedError()
-
-    def feed_data(self, data):
-        raise NotImplementedError
-
-    def optimize(self):
-        raise NotImplementedError
-
-    def test(self):
-        raise NotImplementedError
-
-    def get_current_visuals(self):
-        raise NotImplementedError
-
-    def save(self, path):
-        raise NotImplementedError
-
-    def load(self, path):
-        raise NotImplementedError
+        super().__init__(opt, block_cls=NAFBlockB)

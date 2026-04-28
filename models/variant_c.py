@@ -1,32 +1,13 @@
-# ------------------------------------------------------------------------
-# Variant C: BatchNorm
-#
-# Spec:
-#   - Replace LayerNorm2d with nn.BatchNorm2d for norm1 and norm2 inside NAFBlock.
-#   - Test whether the normalization strategy (layer vs. batch) affects restoration quality.
-# ------------------------------------------------------------------------
+from models.baseline_nafnet import BaselineNAFNet
+from models.archs.nafnet_arch import NAFBlockC
 
 
-class VariantC:
-    """Variant C: BatchNorm"""
+class VariantC(BaselineNAFNet):
+    """Variant C: BatchNorm instead of LayerNorm2d.
+
+    Tests whether the normalization strategy (layer vs. batch) affects
+    restoration quality on SIDD.
+    """
 
     def __init__(self, opt: dict):
-        raise NotImplementedError()
-
-    def feed_data(self, data):
-        raise NotImplementedError
-
-    def optimize(self):
-        raise NotImplementedError
-
-    def test(self):
-        raise NotImplementedError
-
-    def get_current_visuals(self):
-        raise NotImplementedError
-
-    def save(self, path):
-        raise NotImplementedError
-
-    def load(self, path):
-        raise NotImplementedError
+        super().__init__(opt, block_cls=NAFBlockC)
