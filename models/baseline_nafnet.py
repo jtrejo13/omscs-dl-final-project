@@ -3,6 +3,8 @@
 # "Simple Baselines for Image Restoration", Chen et al., ECCV 2022
 # Copyright (c) 2022 megvii-model. All Rights Reserved.
 # ------------------------------------------------------------------------
+import os
+
 import torch
 import torch.optim as optim
 
@@ -74,15 +76,21 @@ class BaselineNAFNet:
 
     def optimize(self) -> dict:
         self.net.train()
-        self.optimizer.zero_grad()
+        self.optimizer.zero_grad(set_to_none=True)
         self.pred = self.net(self.lq)
         loss = self.criterion(self.pred, self.gt)
+
+        if not torch.isfinite(loss):
+            self.scheduler.step()
+            self.optimizer.zero_grad(set_to_none=True)
+            return {"loss": float(loss.item()), "skipped": True}
+
         loss.backward()
         if self.use_grad_clip:
             torch.nn.utils.clip_grad_norm_(self.net.parameters(), 0.01)
         self.optimizer.step()
         self.scheduler.step()
-        return {"loss": loss.item()}
+        return {"loss": loss.item(), "skipped": False}
 
     def test(self):
         self.net.eval()
@@ -97,18 +105,22 @@ class BaselineNAFNet:
             out["gt"] = self.gt.detach().cpu()
         return out
 
-    def save(self, path: str):
-        torch.save(
-            {
-                "net": self.net.state_dict(),
-                "optimizer": self.optimizer.state_dict(),
-                "scheduler": self.scheduler.state_dict(),
-            },
-            path,
-        )
+    def save(self, path: str, epoch: int | None = None, global_iter: int | None = None):
+        payload = {
+            "net": self.net.state_dict(),
+            "optimizer": self.optimizer.state_dict(),
+            "scheduler": self.scheduler.state_dict(),
+        }
+        if epoch is not None:
+            payload["epoch"] = int(epoch)
+        if global_iter is not None:
+            payload["global_iter"] = int(global_iter)
+        tmp = path + ".tmp"
+        torch.save(payload, tmp)
+        os.replace(tmp, path)
         print(f"[BaselineNAFNet] Checkpoint saved: {path}")
 
-    def load(self, path: str):
+    def load(self, path: str) -> dict:
         ckpt = torch.load(path, map_location=self.device)
         # Official NAFNet checkpoints store weights under "params"
         if "params" in ckpt:
@@ -122,3 +134,4 @@ class BaselineNAFNet:
         else:
             self.net.load_state_dict(ckpt, strict=False)
         print(f"[BaselineNAFNet] Checkpoint loaded: {path}")
+        return ckpt

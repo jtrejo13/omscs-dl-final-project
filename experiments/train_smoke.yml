@@ -30,6 +30,7 @@ datasets:
     shuffle: false
     pin_memory: false
 train:
+  seed: 42
   lr: 1.0e-3
   weight_decay: 0.0
   betas: [0.9, 0.9]
@@ -38,9 +39,10 @@ train:
   log_freq: 5
   val_freq: 1
   save_freq: 1
+  nan_abort_threshold: 50
   loss:
     type: PSNRLoss
     loss_weight: 1.0
   scheduler:
-    T_max: 400000
+    # T_max auto-computed at startup from epochs * iters_per_epoch.
     eta_min: 1.0e-7

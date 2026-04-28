@@ -80,6 +80,13 @@ class PairedImageDataset(Dataset):
         use_flip: Enable random horizontal flip (train phase only).
         use_rot: Enable random rotation (train phase only).
         phase: 'train', 'val', or 'test'. Augmentation only applied for 'train'.
+        split: 'all' (use every key), 'val' (first split_ratio fraction after a
+            seeded shuffle), or 'test' (the remainder). Same (split_ratio,
+            split_seed) on both val/test sides yields disjoint, reproducible
+            sets that are identical across runs and across model variants.
+        split_ratio: Fraction of keys assigned to 'val'; 'test' gets 1 - ratio.
+        split_seed: RNG seed for the split shuffle. Must be identical across
+            val and test configs to guarantee disjointness.
     """
 
     def __init__(
@@ -90,6 +97,9 @@ class PairedImageDataset(Dataset):
         use_flip: bool = False,
         use_rot: bool = False,
         phase: str = 'train',
+        split: str = 'all',
+        split_ratio: float = 0.8,
+        split_seed: int = 42,
     ):
         super().__init__()
         self.lq_lmdb = lq_lmdb
@@ -106,12 +116,46 @@ class PairedImageDataset(Dataset):
                 f"LQ and GT LMDB key sets do not match.\n"
                 f"  LQ: {lq_lmdb}\n  GT: {gt_lmdb}"
             )
-        self.keys = lq_keys
+
+        if split == 'all':
+            self.keys = lq_keys
+        else:
+            self.keys = self._apply_split(lq_keys, split, split_ratio, split_seed)
+            print(
+                f"[Dataset] phase={phase!r}  split={split!r}  "
+                f"ratio={split_ratio}  seed={split_seed}  "
+                f"size={len(self.keys)}/{len(lq_keys)}  "
+                f"first_key={self.keys[0]}  last_key={self.keys[-1]}"
+            )
 
         # Opened lazily in __getitem__
         # LMDB envs cannot be shared across forked DataLoader worker processes.
         self._lq_env: lmdb.Environment | None = None
         self._gt_env: lmdb.Environment | None = None
+
+    @staticmethod
+    def _apply_split(keys: list, split: str, ratio: float, seed: int) -> list:
+        """Deterministic disjoint split. Returns sorted subset of keys"""
+        if split not in ('val', 'test'):
+            raise ValueError(
+                f"split must be 'all', 'val', or 'test'; got {split!r}"
+            )
+        if not (0.0 < ratio < 1.0):
+            raise ValueError(
+                f"split_ratio must be in (0, 1); got {ratio}"
+            )
+        if len(keys) < 2:
+            raise ValueError(
+                f"Cannot split {len(keys)} keys into val/test."
+            )
+
+        rng = random.Random(seed)
+        shuffled = list(keys)
+        rng.shuffle(shuffled)
+        cut = int(len(shuffled) * ratio)
+        cut = max(1, min(len(shuffled) - 1, cut))
+        subset = shuffled[:cut] if split == 'val' else shuffled[cut:]
+        return sorted(subset)
 
     def __len__(self) -> int:
         return len(self.keys)
