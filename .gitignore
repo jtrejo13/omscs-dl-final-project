@@ -4,4 +4,4 @@ __pycache__/
 *.pth
 results/*/checkpoints/
 results/*/images/
-data/*
+data/*wandb/
