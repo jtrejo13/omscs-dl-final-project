@@ -1,4 +1,4 @@
-name: nafnet_sidd_variant_c_ctrj
+name: nafnet_sidd_variant_c_ctrj_b16
 model:
   type: variant_c
   img_channel: 3

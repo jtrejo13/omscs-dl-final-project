@@ -1,4 +1,4 @@
-name: nafnet_sidd_variant_c_ctrj
+name: nafnet_sidd_variant_c_ctrj_b16
 model:
   type: variant_c
   img_channel: 3
@@ -7,7 +7,7 @@ model:
   middle_blk_num: 1
   dec_blk_nums: [1, 1, 1, 1]
 path:
-  pretrain_model: results/nafnet_sidd_variant_c_ctrj/checkpoints/latest.pth
+  pretrain_model: results/nafnet_sidd_variant_c_ctrj_b16/checkpoints/latest.pth
 datasets:
   test:
     type: PairedImage
