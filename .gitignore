@@ -3,5 +3,4 @@ __pycache__/
 .venv/*
 *.pth
 results/*/checkpoints/
-results/*/images/
 data/*wandb/
