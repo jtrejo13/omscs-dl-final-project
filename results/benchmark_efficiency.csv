@@ -1,0 +1,7 @@
+Variant,Params_M,GMACs,GFLOPs,Latency_ms,Latency_std_ms,Peak_Mem_MB,Ckpt_MB,PSNR_dB,PSNR_per_GFLOP
+Baseline,17.1,15.97,31.94,16.1,0.1,130,,39.83,1.25
+A (GELU gate),17.1,15.97,31.94,16.7,0.1,196,,39.64,1.24
+B (no SCA),14.9,15.95,31.91,14.3,0.1,252,,39.74,1.25
+C (BatchNorm),17.1,16.09,32.18,10.3,0.1,260,,39.61,1.23
+E (asym. gate),41.5,35.46,70.91,18.4,0.3,444,476,39.94,0.56
+F (gated skip),17.3,16.51,33.02,16.3,0.1,487,,39.90,1.21
