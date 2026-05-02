@@ -1,0 +1,1548 @@
+{
+  "experiment": "nafnet_sidd_variant_e",
+  "timestamp": "2026-05-02T15:51:01.597707Z",
+  "metrics": {
+    "psnr_avg": 39.9393,
+    "ssim_avg": 0.9273,
+    "lpips_avg": 0.1996,
+    "n_samples": 256
+  },
+  "per_sample": [
+    {
+      "sample": "ValidationBlocksSrgb_1",
+      "psnr": 44.715316,
+      "ssim": 0.976131,
+      "lpips": 0.117085
+    },
+    {
+      "sample": "ValidationBlocksSrgb_1000",
+      "psnr": 45.53179,
+      "ssim": 0.986629,
+      "lpips": 0.067717
+    },
+    {
+      "sample": "ValidationBlocksSrgb_1002",
+      "psnr": 45.687689,
+      "ssim": 0.980524,
+      "lpips": 0.181695
+    },
+    {
+      "sample": "ValidationBlocksSrgb_1009",
+      "psnr": 45.002464,
+      "ssim": 0.983719,
+      "lpips": 0.118928
+    },
+    {
+      "sample": "ValidationBlocksSrgb_101",
+      "psnr": 46.508268,
+      "ssim": 0.988454,
+      "lpips": 0.029923
+    },
+    {
+      "sample": "ValidationBlocksSrgb_1018",
+      "psnr": 43.510666,
+      "ssim": 0.975514,
+      "lpips": 0.121704
+    },
+    {
+      "sample": "ValidationBlocksSrgb_1024",
+      "psnr": 35.048726,
+      "ssim": 0.829631,
+      "lpips": 0.404671
+    },
+    {
+      "sample": "ValidationBlocksSrgb_1032",
+      "psnr": 33.357262,
+      "ssim": 0.768802,
+      "lpips": 0.524835
+    },
+    {
+      "sample": "ValidationBlocksSrgb_1036",
+      "psnr": 32.856519,
+      "ssim": 0.746362,
+      "lpips": 0.500522
+    },
+    {
+      "sample": "ValidationBlocksSrgb_1043",
+      "psnr": 34.578429,
+      "ssim": 0.805089,
+      "lpips": 0.437575
+    },
+    {
+      "sample": "ValidationBlocksSrgb_1046",
+      "psnr": 35.194935,
+      "ssim": 0.83309,
+      "lpips": 0.399244
+    },
+    {
+      "sample": "ValidationBlocksSrgb_1052",
+      "psnr": 34.058103,
+      "ssim": 0.789449,
+      "lpips": 0.515464
+    },
+    {
+      "sample": "ValidationBlocksSrgb_1055",
+      "psnr": 32.998695,
+      "ssim": 0.752133,
+      "lpips": 0.456704
+    },
+    {
+      "sample": "ValidationBlocksSrgb_1056",
+      "psnr": 39.452995,
+      "ssim": 0.95858,
+      "lpips": 0.169245
+    },
+    {
+      "sample": "ValidationBlocksSrgb_1077",
+      "psnr": 40.354535,
+      "ssim": 0.947823,
+      "lpips": 0.218583
+    },
+    {
+      "sample": "ValidationBlocksSrgb_1081",
+      "psnr": 40.885054,
+      "ssim": 0.955622,
+      "lpips": 0.268092
+    },
+    {
+      "sample": "ValidationBlocksSrgb_1084",
+      "psnr": 41.141091,
+      "ssim": 0.970979,
+      "lpips": 0.097854
+    },
+    {
+      "sample": "ValidationBlocksSrgb_1090",
+      "psnr": 45.90213,
+      "ssim": 0.981603,
+      "lpips": 0.07469
+    },
+    {
+      "sample": "ValidationBlocksSrgb_1097",
+      "psnr": 45.498919,
+      "ssim": 0.977876,
+      "lpips": 0.075118
+    },
+    {
+      "sample": "ValidationBlocksSrgb_110",
+      "psnr": 45.463804,
+      "ssim": 0.983825,
+      "lpips": 0.048779
+    },
+    {
+      "sample": "ValidationBlocksSrgb_1103",
+      "psnr": 46.124935,
+      "ssim": 0.983092,
+      "lpips": 0.079127
+    },
+    {
+      "sample": "ValidationBlocksSrgb_1104",
+      "psnr": 44.888734,
+      "ssim": 0.977552,
+      "lpips": 0.049381
+    },
+    {
+      "sample": "ValidationBlocksSrgb_1105",
+      "psnr": 45.980901,
+      "ssim": 0.982313,
+      "lpips": 0.083946
+    },
+    {
+      "sample": "ValidationBlocksSrgb_1109",
+      "psnr": 44.995902,
+      "ssim": 0.974723,
+      "lpips": 0.145808
+    },
+    {
+      "sample": "ValidationBlocksSrgb_1114",
+      "psnr": 44.574327,
+      "ssim": 0.973622,
+      "lpips": 0.125925
+    },
+    {
+      "sample": "ValidationBlocksSrgb_1115",
+      "psnr": 44.449816,
+      "ssim": 0.972143,
+      "lpips": 0.14325
+    },
+    {
+      "sample": "ValidationBlocksSrgb_1119",
+      "psnr": 44.881334,
+      "ssim": 0.975637,
+      "lpips": 0.05745
+    },
+    {
+      "sample": "ValidationBlocksSrgb_1121",
+      "psnr": 30.909431,
+      "ssim": 0.754738,
+      "lpips": 0.419284
+    },
+    {
+      "sample": "ValidationBlocksSrgb_1124",
+      "psnr": 32.628678,
+      "ssim": 0.823804,
+      "lpips": 0.21336
+    },
+    {
+      "sample": "ValidationBlocksSrgb_1125",
+      "psnr": 32.305508,
+      "ssim": 0.808211,
+      "lpips": 0.243027
+    },
+    {
+      "sample": "ValidationBlocksSrgb_1128",
+      "psnr": 31.433401,
+      "ssim": 0.768472,
+      "lpips": 0.381415
+    },
+    {
+      "sample": "ValidationBlocksSrgb_1129",
+      "psnr": 32.034176,
+      "ssim": 0.762584,
+      "lpips": 0.39074
+    },
+    {
+      "sample": "ValidationBlocksSrgb_1136",
+      "psnr": 31.375137,
+      "ssim": 0.701731,
+      "lpips": 0.525851
+    },
+    {
+      "sample": "ValidationBlocksSrgb_1142",
+      "psnr": 32.318291,
+      "ssim": 0.862615,
+      "lpips": 0.123725
+    },
+    {
+      "sample": "ValidationBlocksSrgb_1144",
+      "psnr": 31.25738,
+      "ssim": 0.718633,
+      "lpips": 0.493092
+    },
+    {
+      "sample": "ValidationBlocksSrgb_1155",
+      "psnr": 38.220737,
+      "ssim": 0.966548,
+      "lpips": 0.026292
+    },
+    {
+      "sample": "ValidationBlocksSrgb_1158",
+      "psnr": 37.788095,
+      "ssim": 0.967055,
+      "lpips": 0.01688
+    },
+    {
+      "sample": "ValidationBlocksSrgb_1165",
+      "psnr": 39.042553,
+      "ssim": 0.973938,
+      "lpips": 0.009752
+    },
+    {
+      "sample": "ValidationBlocksSrgb_1168",
+      "psnr": 38.72154,
+      "ssim": 0.961547,
+      "lpips": 0.039673
+    },
+    {
+      "sample": "ValidationBlocksSrgb_117",
+      "psnr": 47.698162,
+      "ssim": 0.988709,
+      "lpips": 0.062006
+    },
+    {
+      "sample": "ValidationBlocksSrgb_1171",
+      "psnr": 38.7687,
+      "ssim": 0.970369,
+      "lpips": 0.013354
+    },
+    {
+      "sample": "ValidationBlocksSrgb_1176",
+      "psnr": 39.400462,
+      "ssim": 0.965729,
+      "lpips": 0.035603
+    },
+    {
+      "sample": "ValidationBlocksSrgb_1178",
+      "psnr": 39.30892,
+      "ssim": 0.973668,
+      "lpips": 0.014231
+    },
+    {
+      "sample": "ValidationBlocksSrgb_1179",
+      "psnr": 39.046009,
+      "ssim": 0.968313,
+      "lpips": 0.020805
+    },
+    {
+      "sample": "ValidationBlocksSrgb_1183",
+      "psnr": 38.607273,
+      "ssim": 0.963495,
+      "lpips": 0.035204
+    },
+    {
+      "sample": "ValidationBlocksSrgb_1186",
+      "psnr": 37.761726,
+      "ssim": 0.959076,
+      "lpips": 0.038711
+    },
+    {
+      "sample": "ValidationBlocksSrgb_1193",
+      "psnr": 38.430511,
+      "ssim": 0.963267,
+      "lpips": 0.035755
+    },
+    {
+      "sample": "ValidationBlocksSrgb_1199",
+      "psnr": 37.993935,
+      "ssim": 0.95344,
+      "lpips": 0.036453
+    },
+    {
+      "sample": "ValidationBlocksSrgb_12",
+      "psnr": 39.461626,
+      "ssim": 0.945659,
+      "lpips": 0.388141
+    },
+    {
+      "sample": "ValidationBlocksSrgb_1202",
+      "psnr": 37.761718,
+      "ssim": 0.961784,
+      "lpips": 0.030955
+    },
+    {
+      "sample": "ValidationBlocksSrgb_1203",
+      "psnr": 38.385787,
+      "ssim": 0.968287,
+      "lpips": 0.011458
+    },
+    {
+      "sample": "ValidationBlocksSrgb_1208",
+      "psnr": 38.621152,
+      "ssim": 0.958171,
+      "lpips": 0.03455
+    },
+    {
+      "sample": "ValidationBlocksSrgb_122",
+      "psnr": 40.642927,
+      "ssim": 0.953701,
+      "lpips": 0.093067
+    },
+    {
+      "sample": "ValidationBlocksSrgb_1227",
+      "psnr": 31.235255,
+      "ssim": 0.822846,
+      "lpips": 0.208643
+    },
+    {
+      "sample": "ValidationBlocksSrgb_1229",
+      "psnr": 31.035296,
+      "ssim": 0.801467,
+      "lpips": 0.207925
+    },
+    {
+      "sample": "ValidationBlocksSrgb_1233",
+      "psnr": 31.486599,
+      "ssim": 0.858111,
+      "lpips": 0.110103
+    },
+    {
+      "sample": "ValidationBlocksSrgb_1240",
+      "psnr": 31.971071,
+      "ssim": 0.752285,
+      "lpips": 0.321439
+    },
+    {
+      "sample": "ValidationBlocksSrgb_1252",
+      "psnr": 42.221998,
+      "ssim": 0.952851,
+      "lpips": 0.106443
+    },
+    {
+      "sample": "ValidationBlocksSrgb_1254",
+      "psnr": 40.854196,
+      "ssim": 0.948817,
+      "lpips": 0.031468
+    },
+    {
+      "sample": "ValidationBlocksSrgb_1256",
+      "psnr": 41.149039,
+      "ssim": 0.946437,
+      "lpips": 0.092817
+    },
+    {
+      "sample": "ValidationBlocksSrgb_1260",
+      "psnr": 42.67494,
+      "ssim": 0.955718,
+      "lpips": 0.096017
+    },
+    {
+      "sample": "ValidationBlocksSrgb_128",
+      "psnr": 40.348334,
+      "ssim": 0.988734,
+      "lpips": 0.030599
+    },
+    {
+      "sample": "ValidationBlocksSrgb_131",
+      "psnr": 38.506354,
+      "ssim": 0.986261,
+      "lpips": 0.032579
+    },
+    {
+      "sample": "ValidationBlocksSrgb_132",
+      "psnr": 39.851333,
+      "ssim": 0.986233,
+      "lpips": 0.048898
+    },
+    {
+      "sample": "ValidationBlocksSrgb_137",
+      "psnr": 38.680512,
+      "ssim": 0.971816,
+      "lpips": 0.161976
+    },
+    {
+      "sample": "ValidationBlocksSrgb_14",
+      "psnr": 40.988846,
+      "ssim": 0.960497,
+      "lpips": 0.124222
+    },
+    {
+      "sample": "ValidationBlocksSrgb_140",
+      "psnr": 38.199798,
+      "ssim": 0.970241,
+      "lpips": 0.109502
+    },
+    {
+      "sample": "ValidationBlocksSrgb_143",
+      "psnr": 41.907581,
+      "ssim": 0.987783,
+      "lpips": 0.027994
+    },
+    {
+      "sample": "ValidationBlocksSrgb_146",
+      "psnr": 38.238821,
+      "ssim": 0.95142,
+      "lpips": 0.136326
+    },
+    {
+      "sample": "ValidationBlocksSrgb_147",
+      "psnr": 49.46541,
+      "ssim": 0.991931,
+      "lpips": 0.070074
+    },
+    {
+      "sample": "ValidationBlocksSrgb_15",
+      "psnr": 41.195795,
+      "ssim": 0.947141,
+      "lpips": 0.275333
+    },
+    {
+      "sample": "ValidationBlocksSrgb_150",
+      "psnr": 36.817691,
+      "ssim": 0.972918,
+      "lpips": 0.028561
+    },
+    {
+      "sample": "ValidationBlocksSrgb_152",
+      "psnr": 38.815505,
+      "ssim": 0.978327,
+      "lpips": 0.182869
+    },
+    {
+      "sample": "ValidationBlocksSrgb_161",
+      "psnr": 33.47037,
+      "ssim": 0.806821,
+      "lpips": 0.383873
+    },
+    {
+      "sample": "ValidationBlocksSrgb_175",
+      "psnr": 34.544723,
+      "ssim": 0.811556,
+      "lpips": 0.531784
+    },
+    {
+      "sample": "ValidationBlocksSrgb_184",
+      "psnr": 36.181805,
+      "ssim": 0.863661,
+      "lpips": 0.458556
+    },
+    {
+      "sample": "ValidationBlocksSrgb_196",
+      "psnr": 44.265146,
+      "ssim": 0.969686,
+      "lpips": 0.073484
+    },
+    {
+      "sample": "ValidationBlocksSrgb_197",
+      "psnr": 45.030173,
+      "ssim": 0.976394,
+      "lpips": 0.079969
+    },
+    {
+      "sample": "ValidationBlocksSrgb_2",
+      "psnr": 41.918354,
+      "ssim": 0.95469,
+      "lpips": 0.275193
+    },
+    {
+      "sample": "ValidationBlocksSrgb_20",
+      "psnr": 40.434691,
+      "ssim": 0.94887,
+      "lpips": 0.23974
+    },
+    {
+      "sample": "ValidationBlocksSrgb_212",
+      "psnr": 43.333505,
+      "ssim": 0.967425,
+      "lpips": 0.117149
+    },
+    {
+      "sample": "ValidationBlocksSrgb_216",
+      "psnr": 44.104653,
+      "ssim": 0.971783,
+      "lpips": 0.107223
+    },
+    {
+      "sample": "ValidationBlocksSrgb_232",
+      "psnr": 42.835025,
+      "ssim": 0.969112,
+      "lpips": 0.086282
+    },
+    {
+      "sample": "ValidationBlocksSrgb_235",
+      "psnr": 43.882006,
+      "ssim": 0.972503,
+      "lpips": 0.143203
+    },
+    {
+      "sample": "ValidationBlocksSrgb_236",
+      "psnr": 42.501183,
+      "ssim": 0.960421,
+      "lpips": 0.164893
+    },
+    {
+      "sample": "ValidationBlocksSrgb_238",
+      "psnr": 42.107653,
+      "ssim": 0.971044,
+      "lpips": 0.059744
+    },
+    {
+      "sample": "ValidationBlocksSrgb_24",
+      "psnr": 40.842647,
+      "ssim": 0.942412,
+      "lpips": 0.235213
+    },
+    {
+      "sample": "ValidationBlocksSrgb_240",
+      "psnr": 42.764364,
+      "ssim": 0.96732,
+      "lpips": 0.182166
+    },
+    {
+      "sample": "ValidationBlocksSrgb_242",
+      "psnr": 43.013577,
+      "ssim": 0.974933,
+      "lpips": 0.090992
+    },
+    {
+      "sample": "ValidationBlocksSrgb_247",
+      "psnr": 42.528078,
+      "ssim": 0.969632,
+      "lpips": 0.101146
+    },
+    {
+      "sample": "ValidationBlocksSrgb_249",
+      "psnr": 42.37321,
+      "ssim": 0.963859,
+      "lpips": 0.162408
+    },
+    {
+      "sample": "ValidationBlocksSrgb_250",
+      "psnr": 47.202135,
+      "ssim": 0.988945,
+      "lpips": 0.058607
+    },
+    {
+      "sample": "ValidationBlocksSrgb_252",
+      "psnr": 46.664092,
+      "ssim": 0.98821,
+      "lpips": 0.046054
+    },
+    {
+      "sample": "ValidationBlocksSrgb_258",
+      "psnr": 40.074314,
+      "ssim": 0.947579,
+      "lpips": 0.248818
+    },
+    {
+      "sample": "ValidationBlocksSrgb_260",
+      "psnr": 42.528102,
+      "ssim": 0.973509,
+      "lpips": 0.111555
+    },
+    {
+      "sample": "ValidationBlocksSrgb_266",
+      "psnr": 39.712236,
+      "ssim": 0.933189,
+      "lpips": 0.245468
+    },
+    {
+      "sample": "ValidationBlocksSrgb_268",
+      "psnr": 39.506941,
+      "ssim": 0.926711,
+      "lpips": 0.256259
+    },
+    {
+      "sample": "ValidationBlocksSrgb_269",
+      "psnr": 41.586833,
+      "ssim": 0.953883,
+      "lpips": 0.137231
+    },
+    {
+      "sample": "ValidationBlocksSrgb_270",
+      "psnr": 41.039359,
+      "ssim": 0.967711,
+      "lpips": 0.08488
+    },
+    {
+      "sample": "ValidationBlocksSrgb_275",
+      "psnr": 41.044421,
+      "ssim": 0.947841,
+      "lpips": 0.224691
+    },
+    {
+      "sample": "ValidationBlocksSrgb_282",
+      "psnr": 43.507643,
+      "ssim": 0.974482,
+      "lpips": 0.131095
+    },
+    {
+      "sample": "ValidationBlocksSrgb_285",
+      "psnr": 42.334578,
+      "ssim": 0.979455,
+      "lpips": 0.075602
+    },
+    {
+      "sample": "ValidationBlocksSrgb_288",
+      "psnr": 38.173586,
+      "ssim": 0.951952,
+      "lpips": 0.122747
+    },
+    {
+      "sample": "ValidationBlocksSrgb_290",
+      "psnr": 34.971699,
+      "ssim": 0.854644,
+      "lpips": 0.347898
+    },
+    {
+      "sample": "ValidationBlocksSrgb_294",
+      "psnr": 36.503511,
+      "ssim": 0.889052,
+      "lpips": 0.334078
+    },
+    {
+      "sample": "ValidationBlocksSrgb_298",
+      "psnr": 34.657745,
+      "ssim": 0.838065,
+      "lpips": 0.299013
+    },
+    {
+      "sample": "ValidationBlocksSrgb_300",
+      "psnr": 35.542279,
+      "ssim": 0.852671,
+      "lpips": 0.388315
+    },
+    {
+      "sample": "ValidationBlocksSrgb_302",
+      "psnr": 36.531585,
+      "ssim": 0.907341,
+      "lpips": 0.278309
+    },
+    {
+      "sample": "ValidationBlocksSrgb_304",
+      "psnr": 33.799448,
+      "ssim": 0.847977,
+      "lpips": 0.423696
+    },
+    {
+      "sample": "ValidationBlocksSrgb_306",
+      "psnr": 34.491376,
+      "ssim": 0.843702,
+      "lpips": 0.359513
+    },
+    {
+      "sample": "ValidationBlocksSrgb_309",
+      "psnr": 35.062639,
+      "ssim": 0.885108,
+      "lpips": 0.285649
+    },
+    {
+      "sample": "ValidationBlocksSrgb_330",
+      "psnr": 36.191827,
+      "ssim": 0.883167,
+      "lpips": 0.358796
+    },
+    {
+      "sample": "ValidationBlocksSrgb_331",
+      "psnr": 35.806836,
+      "ssim": 0.869542,
+      "lpips": 0.39801
+    },
+    {
+      "sample": "ValidationBlocksSrgb_333",
+      "psnr": 38.053288,
+      "ssim": 0.940738,
+      "lpips": 0.137062
+    },
+    {
+      "sample": "ValidationBlocksSrgb_334",
+      "psnr": 36.758854,
+      "ssim": 0.875198,
+      "lpips": 0.39708
+    },
+    {
+      "sample": "ValidationBlocksSrgb_335",
+      "psnr": 32.451148,
+      "ssim": 0.796101,
+      "lpips": 0.535882
+    },
+    {
+      "sample": "ValidationBlocksSrgb_338",
+      "psnr": 35.684037,
+      "ssim": 0.87445,
+      "lpips": 0.283456
+    },
+    {
+      "sample": "ValidationBlocksSrgb_34",
+      "psnr": 34.647336,
+      "ssim": 0.84098,
+      "lpips": 0.385792
+    },
+    {
+      "sample": "ValidationBlocksSrgb_343",
+      "psnr": 38.251345,
+      "ssim": 0.920018,
+      "lpips": 0.270932
+    },
+    {
+      "sample": "ValidationBlocksSrgb_353",
+      "psnr": 45.311182,
+      "ssim": 0.981206,
+      "lpips": 0.081164
+    },
+    {
+      "sample": "ValidationBlocksSrgb_359",
+      "psnr": 48.654306,
+      "ssim": 0.991571,
+      "lpips": 0.073634
+    },
+    {
+      "sample": "ValidationBlocksSrgb_36",
+      "psnr": 35.676057,
+      "ssim": 0.855539,
+      "lpips": 0.286517
+    },
+    {
+      "sample": "ValidationBlocksSrgb_372",
+      "psnr": 42.641688,
+      "ssim": 0.959636,
+      "lpips": 0.157479
+    },
+    {
+      "sample": "ValidationBlocksSrgb_38",
+      "psnr": 35.481029,
+      "ssim": 0.855793,
+      "lpips": 0.259491
+    },
+    {
+      "sample": "ValidationBlocksSrgb_387",
+      "psnr": 43.07499,
+      "ssim": 0.970246,
+      "lpips": 0.141864
+    },
+    {
+      "sample": "ValidationBlocksSrgb_388",
+      "psnr": 41.208737,
+      "ssim": 0.967909,
+      "lpips": 0.083832
+    },
+    {
+      "sample": "ValidationBlocksSrgb_393",
+      "psnr": 42.726667,
+      "ssim": 0.977081,
+      "lpips": 0.07538
+    },
+    {
+      "sample": "ValidationBlocksSrgb_397",
+      "psnr": 43.166544,
+      "ssim": 0.985859,
+      "lpips": 0.025505
+    },
+    {
+      "sample": "ValidationBlocksSrgb_412",
+      "psnr": 41.713212,
+      "ssim": 0.956774,
+      "lpips": 0.231367
+    },
+    {
+      "sample": "ValidationBlocksSrgb_420",
+      "psnr": 41.536034,
+      "ssim": 0.947579,
+      "lpips": 0.305508
+    },
+    {
+      "sample": "ValidationBlocksSrgb_426",
+      "psnr": 39.581414,
+      "ssim": 0.92068,
+      "lpips": 0.430398
+    },
+    {
+      "sample": "ValidationBlocksSrgb_428",
+      "psnr": 39.570427,
+      "ssim": 0.920702,
+      "lpips": 0.411972
+    },
+    {
+      "sample": "ValidationBlocksSrgb_443",
+      "psnr": 40.798581,
+      "ssim": 0.942343,
+      "lpips": 0.368062
+    },
+    {
+      "sample": "ValidationBlocksSrgb_444",
+      "psnr": 37.82715,
+      "ssim": 0.884375,
+      "lpips": 0.340854
+    },
+    {
+      "sample": "ValidationBlocksSrgb_455",
+      "psnr": 45.811782,
+      "ssim": 0.977791,
+      "lpips": 0.091449
+    },
+    {
+      "sample": "ValidationBlocksSrgb_467",
+      "psnr": 46.522878,
+      "ssim": 0.973687,
+      "lpips": 0.054359
+    },
+    {
+      "sample": "ValidationBlocksSrgb_47",
+      "psnr": 33.637016,
+      "ssim": 0.842995,
+      "lpips": 0.276623
+    },
+    {
+      "sample": "ValidationBlocksSrgb_471",
+      "psnr": 46.056111,
+      "ssim": 0.978719,
+      "lpips": 0.096202
+    },
+    {
+      "sample": "ValidationBlocksSrgb_473",
+      "psnr": 45.491804,
+      "ssim": 0.977787,
+      "lpips": 0.083878
+    },
+    {
+      "sample": "ValidationBlocksSrgb_480",
+      "psnr": 42.668138,
+      "ssim": 0.980304,
+      "lpips": 0.064796
+    },
+    {
+      "sample": "ValidationBlocksSrgb_5",
+      "psnr": 39.90631,
+      "ssim": 0.958071,
+      "lpips": 0.134239
+    },
+    {
+      "sample": "ValidationBlocksSrgb_500",
+      "psnr": 45.607186,
+      "ssim": 0.987957,
+      "lpips": 0.072818
+    },
+    {
+      "sample": "ValidationBlocksSrgb_508",
+      "psnr": 41.441075,
+      "ssim": 0.975001,
+      "lpips": 0.087215
+    },
+    {
+      "sample": "ValidationBlocksSrgb_512",
+      "psnr": 40.59181,
+      "ssim": 0.973843,
+      "lpips": 0.064135
+    },
+    {
+      "sample": "ValidationBlocksSrgb_513",
+      "psnr": 43.25109,
+      "ssim": 0.981427,
+      "lpips": 0.065828
+    },
+    {
+      "sample": "ValidationBlocksSrgb_515",
+      "psnr": 39.943362,
+      "ssim": 0.975733,
+      "lpips": 0.053825
+    },
+    {
+      "sample": "ValidationBlocksSrgb_519",
+      "psnr": 40.126513,
+      "ssim": 0.974394,
+      "lpips": 0.067129
+    },
+    {
+      "sample": "ValidationBlocksSrgb_529",
+      "psnr": 40.176616,
+      "ssim": 0.97838,
+      "lpips": 0.052848
+    },
+    {
+      "sample": "ValidationBlocksSrgb_534",
+      "psnr": 40.691025,
+      "ssim": 0.960608,
+      "lpips": 0.137121
+    },
+    {
+      "sample": "ValidationBlocksSrgb_535",
+      "psnr": 40.045381,
+      "ssim": 0.97604,
+      "lpips": 0.070017
+    },
+    {
+      "sample": "ValidationBlocksSrgb_544",
+      "psnr": 35.379222,
+      "ssim": 0.927469,
+      "lpips": 0.163768
+    },
+    {
+      "sample": "ValidationBlocksSrgb_545",
+      "psnr": 37.180188,
+      "ssim": 0.898277,
+      "lpips": 0.300859
+    },
+    {
+      "sample": "ValidationBlocksSrgb_546",
+      "psnr": 37.722144,
+      "ssim": 0.920938,
+      "lpips": 0.266469
+    },
+    {
+      "sample": "ValidationBlocksSrgb_547",
+      "psnr": 36.75395,
+      "ssim": 0.902971,
+      "lpips": 0.299806
+    },
+    {
+      "sample": "ValidationBlocksSrgb_55",
+      "psnr": 34.901896,
+      "ssim": 0.818866,
+      "lpips": 0.300379
+    },
+    {
+      "sample": "ValidationBlocksSrgb_556",
+      "psnr": 34.497191,
+      "ssim": 0.852552,
+      "lpips": 0.292232
+    },
+    {
+      "sample": "ValidationBlocksSrgb_566",
+      "psnr": 38.376339,
+      "ssim": 0.922265,
+      "lpips": 0.313611
+    },
+    {
+      "sample": "ValidationBlocksSrgb_576",
+      "psnr": 33.059291,
+      "ssim": 0.831222,
+      "lpips": 0.278
+    },
+    {
+      "sample": "ValidationBlocksSrgb_582",
+      "psnr": 34.856993,
+      "ssim": 0.825563,
+      "lpips": 0.375202
+    },
+    {
+      "sample": "ValidationBlocksSrgb_586",
+      "psnr": 33.481728,
+      "ssim": 0.802991,
+      "lpips": 0.478572
+    },
+    {
+      "sample": "ValidationBlocksSrgb_589",
+      "psnr": 34.858981,
+      "ssim": 0.849868,
+      "lpips": 0.361766
+    },
+    {
+      "sample": "ValidationBlocksSrgb_596",
+      "psnr": 35.397173,
+      "ssim": 0.87055,
+      "lpips": 0.383483
+    },
+    {
+      "sample": "ValidationBlocksSrgb_597",
+      "psnr": 34.512897,
+      "ssim": 0.832038,
+      "lpips": 0.397886
+    },
+    {
+      "sample": "ValidationBlocksSrgb_603",
+      "psnr": 35.066218,
+      "ssim": 0.86192,
+      "lpips": 0.356585
+    },
+    {
+      "sample": "ValidationBlocksSrgb_62",
+      "psnr": 35.779077,
+      "ssim": 0.873367,
+      "lpips": 0.243235
+    },
+    {
+      "sample": "ValidationBlocksSrgb_624",
+      "psnr": 44.904203,
+      "ssim": 0.97924,
+      "lpips": 0.097128
+    },
+    {
+      "sample": "ValidationBlocksSrgb_625",
+      "psnr": 41.974012,
+      "ssim": 0.971132,
+      "lpips": 0.081709
+    },
+    {
+      "sample": "ValidationBlocksSrgb_626",
+      "psnr": 44.785765,
+      "ssim": 0.978781,
+      "lpips": 0.093899
+    },
+    {
+      "sample": "ValidationBlocksSrgb_627",
+      "psnr": 42.932926,
+      "ssim": 0.965578,
+      "lpips": 0.158489
+    },
+    {
+      "sample": "ValidationBlocksSrgb_636",
+      "psnr": 43.219887,
+      "ssim": 0.966396,
+      "lpips": 0.103935
+    },
+    {
+      "sample": "ValidationBlocksSrgb_640",
+      "psnr": 42.313644,
+      "ssim": 0.967447,
+      "lpips": 0.11582
+    },
+    {
+      "sample": "ValidationBlocksSrgb_648",
+      "psnr": 44.216496,
+      "ssim": 0.983538,
+      "lpips": 0.221861
+    },
+    {
+      "sample": "ValidationBlocksSrgb_654",
+      "psnr": 43.734481,
+      "ssim": 0.982345,
+      "lpips": 0.184213
+    },
+    {
+      "sample": "ValidationBlocksSrgb_663",
+      "psnr": 44.198125,
+      "ssim": 0.983953,
+      "lpips": 0.215667
+    },
+    {
+      "sample": "ValidationBlocksSrgb_673",
+      "psnr": 40.797198,
+      "ssim": 0.963332,
+      "lpips": 0.216058
+    },
+    {
+      "sample": "ValidationBlocksSrgb_674",
+      "psnr": 40.831579,
+      "ssim": 0.965677,
+      "lpips": 0.150151
+    },
+    {
+      "sample": "ValidationBlocksSrgb_679",
+      "psnr": 39.195608,
+      "ssim": 0.937772,
+      "lpips": 0.342657
+    },
+    {
+      "sample": "ValidationBlocksSrgb_682",
+      "psnr": 40.902035,
+      "ssim": 0.968735,
+      "lpips": 0.141411
+    },
+    {
+      "sample": "ValidationBlocksSrgb_683",
+      "psnr": 43.584342,
+      "ssim": 0.975997,
+      "lpips": 0.163821
+    },
+    {
+      "sample": "ValidationBlocksSrgb_685",
+      "psnr": 42.997733,
+      "ssim": 0.976214,
+      "lpips": 0.137364
+    },
+    {
+      "sample": "ValidationBlocksSrgb_692",
+      "psnr": 41.679311,
+      "ssim": 0.971678,
+      "lpips": 0.154406
+    },
+    {
+      "sample": "ValidationBlocksSrgb_693",
+      "psnr": 42.155142,
+      "ssim": 0.958225,
+      "lpips": 0.116811
+    },
+    {
+      "sample": "ValidationBlocksSrgb_699",
+      "psnr": 44.948953,
+      "ssim": 0.98295,
+      "lpips": 0.070895
+    },
+    {
+      "sample": "ValidationBlocksSrgb_7",
+      "psnr": 44.113455,
+      "ssim": 0.969052,
+      "lpips": 0.114392
+    },
+    {
+      "sample": "ValidationBlocksSrgb_707",
+      "psnr": 35.70021,
+      "ssim": 0.835291,
+      "lpips": 0.486012
+    },
+    {
+      "sample": "ValidationBlocksSrgb_709",
+      "psnr": 38.608045,
+      "ssim": 0.935875,
+      "lpips": 0.494441
+    },
+    {
+      "sample": "ValidationBlocksSrgb_718",
+      "psnr": 39.206741,
+      "ssim": 0.941647,
+      "lpips": 0.424066
+    },
+    {
+      "sample": "ValidationBlocksSrgb_722",
+      "psnr": 38.487996,
+      "ssim": 0.934871,
+      "lpips": 0.389184
+    },
+    {
+      "sample": "ValidationBlocksSrgb_733",
+      "psnr": 34.39186,
+      "ssim": 0.842739,
+      "lpips": 0.404918
+    },
+    {
+      "sample": "ValidationBlocksSrgb_741",
+      "psnr": 32.825035,
+      "ssim": 0.795042,
+      "lpips": 0.582075
+    },
+    {
+      "sample": "ValidationBlocksSrgb_742",
+      "psnr": 32.973302,
+      "ssim": 0.791285,
+      "lpips": 0.561766
+    },
+    {
+      "sample": "ValidationBlocksSrgb_743",
+      "psnr": 32.248626,
+      "ssim": 0.768941,
+      "lpips": 0.563742
+    },
+    {
+      "sample": "ValidationBlocksSrgb_747",
+      "psnr": 34.413286,
+      "ssim": 0.819443,
+      "lpips": 0.479126
+    },
+    {
+      "sample": "ValidationBlocksSrgb_756",
+      "psnr": 33.332051,
+      "ssim": 0.824318,
+      "lpips": 0.517152
+    },
+    {
+      "sample": "ValidationBlocksSrgb_767",
+      "psnr": 33.769885,
+      "ssim": 0.812071,
+      "lpips": 0.549894
+    },
+    {
+      "sample": "ValidationBlocksSrgb_77",
+      "psnr": 38.523854,
+      "ssim": 0.916174,
+      "lpips": 0.319216
+    },
+    {
+      "sample": "ValidationBlocksSrgb_778",
+      "psnr": 43.777106,
+      "ssim": 0.967784,
+      "lpips": 0.142059
+    },
+    {
+      "sample": "ValidationBlocksSrgb_782",
+      "psnr": 42.169172,
+      "ssim": 0.96347,
+      "lpips": 0.356223
+    },
+    {
+      "sample": "ValidationBlocksSrgb_786",
+      "psnr": 43.369092,
+      "ssim": 0.973033,
+      "lpips": 0.313028
+    },
+    {
+      "sample": "ValidationBlocksSrgb_794",
+      "psnr": 44.502157,
+      "ssim": 0.9717,
+      "lpips": 0.096836
+    },
+    {
+      "sample": "ValidationBlocksSrgb_80",
+      "psnr": 37.432052,
+      "ssim": 0.933534,
+      "lpips": 0.355436
+    },
+    {
+      "sample": "ValidationBlocksSrgb_806",
+      "psnr": 42.155858,
+      "ssim": 0.964288,
+      "lpips": 0.082403
+    },
+    {
+      "sample": "ValidationBlocksSrgb_815",
+      "psnr": 42.37355,
+      "ssim": 0.956213,
+      "lpips": 0.179469
+    },
+    {
+      "sample": "ValidationBlocksSrgb_819",
+      "psnr": 45.161346,
+      "ssim": 0.982562,
+      "lpips": 0.111929
+    },
+    {
+      "sample": "ValidationBlocksSrgb_821",
+      "psnr": 43.227643,
+      "ssim": 0.971603,
+      "lpips": 0.156459
+    },
+    {
+      "sample": "ValidationBlocksSrgb_822",
+      "psnr": 42.62661,
+      "ssim": 0.971174,
+      "lpips": 0.103015
+    },
+    {
+      "sample": "ValidationBlocksSrgb_824",
+      "psnr": 44.908722,
+      "ssim": 0.982338,
+      "lpips": 0.117556
+    },
+    {
+      "sample": "ValidationBlocksSrgb_828",
+      "psnr": 44.757989,
+      "ssim": 0.986211,
+      "lpips": 0.098552
+    },
+    {
+      "sample": "ValidationBlocksSrgb_83",
+      "psnr": 37.607433,
+      "ssim": 0.888027,
+      "lpips": 0.346881
+    },
+    {
+      "sample": "ValidationBlocksSrgb_830",
+      "psnr": 45.445033,
+      "ssim": 0.989735,
+      "lpips": 0.076139
+    },
+    {
+      "sample": "ValidationBlocksSrgb_835",
+      "psnr": 41.102223,
+      "ssim": 0.955159,
+      "lpips": 0.199906
+    },
+    {
+      "sample": "ValidationBlocksSrgb_836",
+      "psnr": 41.305431,
+      "ssim": 0.975225,
+      "lpips": 0.050576
+    },
+    {
+      "sample": "ValidationBlocksSrgb_84",
+      "psnr": 37.02741,
+      "ssim": 0.929461,
+      "lpips": 0.400659
+    },
+    {
+      "sample": "ValidationBlocksSrgb_840",
+      "psnr": 44.828217,
+      "ssim": 0.98116,
+      "lpips": 0.079684
+    },
+    {
+      "sample": "ValidationBlocksSrgb_848",
+      "psnr": 41.588406,
+      "ssim": 0.978153,
+      "lpips": 0.038557
+    },
+    {
+      "sample": "ValidationBlocksSrgb_849",
+      "psnr": 40.998888,
+      "ssim": 0.962802,
+      "lpips": 0.084218
+    },
+    {
+      "sample": "ValidationBlocksSrgb_851",
+      "psnr": 40.549946,
+      "ssim": 0.9506,
+      "lpips": 0.191772
+    },
+    {
+      "sample": "ValidationBlocksSrgb_864",
+      "psnr": 34.435804,
+      "ssim": 0.806125,
+      "lpips": 0.404964
+    },
+    {
+      "sample": "ValidationBlocksSrgb_867",
+      "psnr": 30.479934,
+      "ssim": 0.63861,
+      "lpips": 0.501312
+    },
+    {
+      "sample": "ValidationBlocksSrgb_869",
+      "psnr": 33.10401,
+      "ssim": 0.751179,
+      "lpips": 0.45572
+    },
+    {
+      "sample": "ValidationBlocksSrgb_873",
+      "psnr": 35.284812,
+      "ssim": 0.827688,
+      "lpips": 0.428464
+    },
+    {
+      "sample": "ValidationBlocksSrgb_876",
+      "psnr": 32.621141,
+      "ssim": 0.732204,
+      "lpips": 0.522894
+    },
+    {
+      "sample": "ValidationBlocksSrgb_881",
+      "psnr": 31.655458,
+      "ssim": 0.719288,
+      "lpips": 0.4359
+    },
+    {
+      "sample": "ValidationBlocksSrgb_891",
+      "psnr": 35.691607,
+      "ssim": 0.844999,
+      "lpips": 0.438332
+    },
+    {
+      "sample": "ValidationBlocksSrgb_892",
+      "psnr": 33.83098,
+      "ssim": 0.800917,
+      "lpips": 0.430355
+    },
+    {
+      "sample": "ValidationBlocksSrgb_896",
+      "psnr": 39.694595,
+      "ssim": 0.960547,
+      "lpips": 0.124412
+    },
+    {
+      "sample": "ValidationBlocksSrgb_898",
+      "psnr": 40.688922,
+      "ssim": 0.971416,
+      "lpips": 0.083428
+    },
+    {
+      "sample": "ValidationBlocksSrgb_905",
+      "psnr": 40.285016,
+      "ssim": 0.951036,
+      "lpips": 0.221299
+    },
+    {
+      "sample": "ValidationBlocksSrgb_910",
+      "psnr": 38.737559,
+      "ssim": 0.954453,
+      "lpips": 0.067383
+    },
+    {
+      "sample": "ValidationBlocksSrgb_911",
+      "psnr": 36.86774,
+      "ssim": 0.886942,
+      "lpips": 0.265153
+    },
+    {
+      "sample": "ValidationBlocksSrgb_921",
+      "psnr": 43.567676,
+      "ssim": 0.974864,
+      "lpips": 0.172061
+    },
+    {
+      "sample": "ValidationBlocksSrgb_927",
+      "psnr": 40.199829,
+      "ssim": 0.963008,
+      "lpips": 0.084562
+    },
+    {
+      "sample": "ValidationBlocksSrgb_932",
+      "psnr": 44.812442,
+      "ssim": 0.975217,
+      "lpips": 0.075704
+    },
+    {
+      "sample": "ValidationBlocksSrgb_933",
+      "psnr": 44.169979,
+      "ssim": 0.969949,
+      "lpips": 0.0917
+    },
+    {
+      "sample": "ValidationBlocksSrgb_935",
+      "psnr": 44.478866,
+      "ssim": 0.970297,
+      "lpips": 0.084851
+    },
+    {
+      "sample": "ValidationBlocksSrgb_936",
+      "psnr": 45.970899,
+      "ssim": 0.978103,
+      "lpips": 0.051802
+    },
+    {
+      "sample": "ValidationBlocksSrgb_955",
+      "psnr": 45.405534,
+      "ssim": 0.978909,
+      "lpips": 0.058473
+    },
+    {
+      "sample": "ValidationBlocksSrgb_956",
+      "psnr": 43.174629,
+      "ssim": 0.969543,
+      "lpips": 0.12754
+    },
+    {
+      "sample": "ValidationBlocksSrgb_96",
+      "psnr": 46.237433,
+      "ssim": 0.9856,
+      "lpips": 0.061235
+    },
+    {
+      "sample": "ValidationBlocksSrgb_964",
+      "psnr": 42.052978,
+      "ssim": 0.979916,
+      "lpips": 0.079801
+    },
+    {
+      "sample": "ValidationBlocksSrgb_965",
+      "psnr": 43.207459,
+      "ssim": 0.984617,
+      "lpips": 0.079883
+    },
+    {
+      "sample": "ValidationBlocksSrgb_970",
+      "psnr": 41.320048,
+      "ssim": 0.951789,
+      "lpips": 0.060776
+    },
+    {
+      "sample": "ValidationBlocksSrgb_971",
+      "psnr": 41.018029,
+      "ssim": 0.953205,
+      "lpips": 0.063157
+    },
+    {
+      "sample": "ValidationBlocksSrgb_975",
+      "psnr": 45.023382,
+      "ssim": 0.986233,
+      "lpips": 0.147424
+    },
+    {
+      "sample": "ValidationBlocksSrgb_978",
+      "psnr": 45.228693,
+      "ssim": 0.98378,
+      "lpips": 0.179054
+    },
+    {
+      "sample": "ValidationBlocksSrgb_980",
+      "psnr": 43.363768,
+      "ssim": 0.98399,
+      "lpips": 0.150367
+    },
+    {
+      "sample": "ValidationBlocksSrgb_981",
+      "psnr": 42.151681,
+      "ssim": 0.967438,
+      "lpips": 0.069545
+    },
+    {
+      "sample": "ValidationBlocksSrgb_985",
+      "psnr": 44.620903,
+      "ssim": 0.980575,
+      "lpips": 0.108481
+    },
+    {
+      "sample": "ValidationBlocksSrgb_987",
+      "psnr": 39.947652,
+      "ssim": 0.952333,
+      "lpips": 0.09505
+    },
+    {
+      "sample": "ValidationBlocksSrgb_989",
+      "psnr": 39.076501,
+      "ssim": 0.948004,
+      "lpips": 0.067644
+    },
+    {
+      "sample": "ValidationBlocksSrgb_99",
+      "psnr": 46.703486,
+      "ssim": 0.98823,
+      "lpips": 0.051295
+    },
+    {
+      "sample": "ValidationBlocksSrgb_992",
+      "psnr": 44.293394,
+      "ssim": 0.979986,
+      "lpips": 0.119827
+    },
+    {
+      "sample": "ValidationBlocksSrgb_993",
+      "psnr": 45.592809,
+      "ssim": 0.986159,
+      "lpips": 0.115671
+    },
+    {
+      "sample": "ValidationBlocksSrgb_994",
+      "psnr": 46.492166,
+      "ssim": 0.988238,
+      "lpips": 0.104108
+    },
+    {
+      "sample": "ValidationBlocksSrgb_996",
+      "psnr": 43.137645,
+      "ssim": 0.97052,
+      "lpips": 0.15559
+    },
+    {
+      "sample": "ValidationBlocksSrgb_999",
+      "psnr": 44.062998,
+      "ssim": 0.979516,
+      "lpips": 0.089356
+    }
+  ]
+}
