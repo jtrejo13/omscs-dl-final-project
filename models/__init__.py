@@ -18,5 +18,11 @@ def build_model(opt):
     elif model_type == "variant_c":
         from .variant_c import VariantC
         return VariantC(opt)
+    elif model_type == "variant_e":
+        from .variant_e import VariantE
+        return VariantE(opt)
+    elif model_type == "variant_f":
+        from .variant_f import VariantF
+        return VariantF(opt)
     else:
         raise ValueError(f"Unknown model type: '{model_type}'")

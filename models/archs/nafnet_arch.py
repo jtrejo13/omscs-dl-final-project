@@ -32,6 +32,40 @@ class GELUGate(nn.Module):
         return x1 * F.gelu(x2)
 
 
+class AsymmetricSimpleGate(nn.Module):
+    """SimpleGate with an unequal channel split.
+
+    Splits the input into (ratio_big * c, ratio_small * c) along channels,
+    projects the small half up to ratio_big * c with a 1x1 conv, then
+    multiplies element-wise. Output channels: ratio_big * c.
+    """
+
+    def __init__(self, c, ratio_big=2, ratio_small=1):
+        super().__init__()
+        self.big = ratio_big * c
+        self.small = ratio_small * c
+        self.proj = nn.Conv2d(self.small, self.big, kernel_size=1, bias=True)
+
+    def forward(self, x):
+        x_big, x_small = torch.split(x, [self.big, self.small], dim=1)
+        return x_big * self.proj(x_small)
+
+
+class SkipGate(nn.Module):
+    """Per-channel sigmoid gate over enc_skip, conditioned on concat([x, enc_skip]).
+
+    Output: x + sigmoid(conv1x1([x, enc_skip])) * enc_skip.
+    """
+
+    def __init__(self, c):
+        super().__init__()
+        self.gate = nn.Conv2d(2 * c, c, kernel_size=1, bias=True)
+
+    def forward(self, x, enc_skip):
+        g = torch.sigmoid(self.gate(torch.cat([x, enc_skip], dim=1)))
+        return x + g * enc_skip
+
+
 class NAFBlock(nn.Module):
     def __init__(self, c, DW_Expand=2, FFN_Expand=2, drop_out_rate=0.):
         super().__init__()
@@ -132,13 +166,71 @@ class NAFBlockC(NAFBlock):
         self.norm2 = nn.BatchNorm2d(c)
 
 
+class NAFBlockE(NAFBlock):
+    """Variant E: AsymmetricSimpleGate with 2:1 split (instead of 1:1).
+
+    Both the depthwise gate and the FFN gate become asymmetric. DW_Expand and
+    FFN_Expand are set to 3 so the gate input splits cleanly into (2c, c);
+    the smaller half is projected up to 2c via a 1x1 conv before the
+    element-wise multiplication. Output of each gate has 2c channels, which
+    feeds wider conv3 / conv5 / SCA layers than baseline.
+    """
+
+    def __init__(self, c, DW_Expand=3, FFN_Expand=3, drop_out_rate=0.):
+        nn.Module.__init__(self)
+        dw_channel = c * DW_Expand
+        ffn_channel = c * FFN_Expand
+
+        self.conv1 = nn.Conv2d(c, dw_channel, kernel_size=1, padding=0, stride=1, groups=1, bias=True)
+        self.conv2 = nn.Conv2d(dw_channel, dw_channel, kernel_size=3, padding=1, stride=1, groups=dw_channel, bias=True)
+        self.sg = AsymmetricSimpleGate(c, ratio_big=2, ratio_small=1)
+        self.sca = nn.Sequential(
+            nn.AdaptiveAvgPool2d(1),
+            nn.Conv2d(2 * c, 2 * c, kernel_size=1, padding=0, stride=1, groups=1, bias=True),
+        )
+        self.conv3 = nn.Conv2d(2 * c, c, kernel_size=1, padding=0, stride=1, groups=1, bias=True)
+
+        self.conv4 = nn.Conv2d(c, ffn_channel, kernel_size=1, padding=0, stride=1, groups=1, bias=True)
+        self.sg_ffn = AsymmetricSimpleGate(c, ratio_big=2, ratio_small=1)
+        self.conv5 = nn.Conv2d(2 * c, c, kernel_size=1, padding=0, stride=1, groups=1, bias=True)
+
+        self.norm1 = LayerNorm2d(c)
+        self.norm2 = LayerNorm2d(c)
+
+        self.dropout1 = nn.Dropout(drop_out_rate) if drop_out_rate > 0. else nn.Identity()
+        self.dropout2 = nn.Dropout(drop_out_rate) if drop_out_rate > 0. else nn.Identity()
+
+        self.beta = nn.Parameter(torch.zeros((1, c, 1, 1)), requires_grad=True)
+        self.gamma = nn.Parameter(torch.zeros((1, c, 1, 1)), requires_grad=True)
+
+    def forward(self, inp):
+        x = self.norm1(inp)
+        x = self.conv1(x)
+        x = self.conv2(x)
+        x = self.sg(x)
+        x = x * self.sca(x)
+        x = self.conv3(x)
+        x = self.dropout1(x)
+        y = inp + x * self.beta
+
+        x = self.conv4(self.norm2(y))
+        x = self.sg_ffn(x)
+        x = self.conv5(x)
+        x = self.dropout2(x)
+        return y + x * self.gamma
+
+
 class NAFNet(nn.Module):
 
-    def __init__(self, img_channel=3, width=16, middle_blk_num=1, enc_blk_nums=[], dec_blk_nums=[], block_cls=None):
+    def __init__(self, img_channel=3, width=16, middle_blk_num=1, enc_blk_nums=[], dec_blk_nums=[], block_cls=None, skip_fusion="add"):
         super().__init__()
 
         if block_cls is None:
             block_cls = NAFBlock
+
+        if skip_fusion not in ("add", "gated"):
+            raise ValueError(f"Unknown skip_fusion: {skip_fusion!r} (expected 'add' or 'gated')")
+        self.skip_fusion = skip_fusion
 
         self.intro = nn.Conv2d(in_channels=img_channel, out_channels=width, kernel_size=3, padding=1, stride=1, groups=1,
                               bias=True)
@@ -184,6 +276,15 @@ class NAFNet(nn.Module):
 
         self.padder_size = 2 ** len(self.encoders)
 
+        if skip_fusion == "gated":
+            self.skip_gates = nn.ModuleList()
+            chan_g = width
+            for _ in enc_blk_nums:
+                chan_g *= 2
+            for _ in dec_blk_nums:
+                chan_g //= 2
+                self.skip_gates.append(SkipGate(chan_g))
+
     def forward(self, inp):
         B, C, H, W = inp.shape
         inp = self.check_image_size(inp)
@@ -199,9 +300,10 @@ class NAFNet(nn.Module):
 
         x = self.middle_blks(x)
 
-        for decoder, up, enc_skip in zip(self.decoders, self.ups, encs[::-1]):
+        gates = self.skip_gates if self.skip_fusion == "gated" else [None] * len(self.decoders)
+        for decoder, up, enc_skip, gate in zip(self.decoders, self.ups, encs[::-1], gates):
             x = up(x)
-            x = x + enc_skip
+            x = gate(x, enc_skip) if gate is not None else (x + enc_skip)
             x = decoder(x)
 
         x = self.ending(x)

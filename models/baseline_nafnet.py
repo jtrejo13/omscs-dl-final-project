@@ -35,6 +35,7 @@ class BaselineNAFNet:
             enc_blk_nums=net_cfg.get("enc_blk_nums", [2, 2, 4, 8]),
             dec_blk_nums=net_cfg.get("dec_blk_nums", [2, 2, 2, 2]),
             block_cls=block_cls,
+            skip_fusion=net_cfg.get("skip_fusion", "add"),
         ).to(self.device)
 
         train_cfg = opt.get("train", {})
