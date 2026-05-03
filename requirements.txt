@@ -11,3 +11,4 @@ tqdm
 wandb>=0.26.1
 huggingface_hub>=1.12.0
 hf_transfer>=0.1.9
+thop>=0.1.1
