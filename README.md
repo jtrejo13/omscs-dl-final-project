@@ -12,13 +12,13 @@ in archival preservation, medical imaging, and consumer media. This project stud
 CNN-based architecture that achieves state-of-the-art restoration quality by eliminating non-linear activation
 functions in favor of a learned gating mechanism (SimpleGate) and a lightweight channel attention module (SCA).
 
-We modify NAFNet's core design choices by training the baseline alongside three targeted variants,
+We modify NAFNet's core design choices by training the baseline alongside five targeted variants,
 each modifying exactly one component, to understand which parts of the architecture actually drive performance.
 
 ## Goals
 
 - Establish a **NAFNet baseline**.
-- Train and evaluate **three architectural variants**, each isolating one design decision.
+- Train and evaluate **five architectural variants**, each isolating one design decision.
 - Measure the effect of each modification on restoration quality and computational efficiency.
 - Write a final report analyzing what the ablations reveal about NAFNet's design.
 
@@ -30,6 +30,8 @@ each modifying exactly one component, to understand which parts of the architect
 | **Variant A**: GELU Gate | `x1 * GELU(x2)` instead of `x1 * x2` | Role of the activation-free gate |
 | **Variant B**: No SCA | SCA module removed | Contribution of channel attention |
 | **Variant C**: BatchNorm | LayerNorm → BatchNorm2d | Normalization strategy |
+| **Variant E**: Asym. Gate | SimpleGate split changed from (c, c) to (2c, c) with a 1×1 projection on the smaller half | Whether the gate halves need to be symmetric |
+| **Variant F**: Gated Skip | Additive U-Net decoder skips replaced with `x + sigmoid(conv1x1([x, skip])) * skip` | Value of learned skip-connection fusion |
 
 ## Dataset
 
@@ -85,26 +87,43 @@ A successful smoke test prints training loss, then PSNR / SSIM / LPIPS on the va
 
 ### 3. Run a full training job
 
-Each model has a dedicated train config and batch script:
+Only the smoke job is checked in (`jobs/train_smoke.sh`). For full runs, invoke `train.py` directly from a SLURM script or interactive session against the appropriate config in `experiments/`:
 
-| Model | Config | Job |
+| Model | Train config | Test config |
 |---|---|---|
-| Baseline | `experiments/train_baseline.yml` | `jobs/train_baseline.sh` |
-| Variant A | `experiments/train_variant_a.yml` | `jobs/train_variant_a.sh` |
-| Variant B | `experiments/train_variant_b.yml` | `jobs/train_variant_b.sh` |
-| Variant C | `experiments/train_variant_c.yml` | `jobs/train_variant_c.sh` |
+| Baseline | `experiments/train_baseline.yml` | `experiments/test_baseline.yml` |
+| Variant A | `experiments/train_variant_a.yml` | `experiments/test_variant_a.yml` |
+| Variant B | `experiments/train_variant_b.yml` | `experiments/test_variant_b.yml` |
+| Variant C | `experiments/train_variant_c.yml` | `experiments/test_variant_c.yml` |
+| Variant E | `experiments/train_variant_e.yml` | `experiments/test_variant_e.yml` |
+| Variant F | `experiments/train_variant_f.yml` | `experiments/test_variant_f.yml` |
 
 ```bash
-sbatch jobs/train_baseline.sh
+python train.py --opt experiments/train_baseline.yml
 ```
 
 ### 4. Evaluate a trained model
 
 ```bash
-sbatch jobs/test_baseline.sh
+python test.py --opt experiments/test_baseline.yml
 ```
 
-Results are written to `results/<name>/results.json` (PSNR, SSIM, LPIPS per image + averages).
+Results are written to `results/<name>/results.json` (PSNR, SSIM, LPIPS per image + averages) and side-by-side comparison images to `results/<name>/images/`.
+
+## Computational Efficiency Benchmark
+
+`scripts/benchmark.py` measures FLOPs/MACs (via `thop`), inference latency, peak GPU memory, on-disk checkpoint size, and PSNR/GFLOP for all canonical variants.
+
+```bash
+# All canonical variants (writes results/benchmark_efficiency.{csv,json})
+python scripts/benchmark.py
+
+# Single variant
+python scripts/benchmark.py --opt experiments/test_baseline.yml
+
+# Custom resolution / timing budget
+python scripts/benchmark.py
+```
 
 ## Adding a New Experiment
 
@@ -148,14 +167,9 @@ path:
   pretrain_model: results/nafnet_sidd_variant_x/checkpoints/latest.pth
 ```
 
-### 3. Create batch job scripts
+### 3. Create a batch job script (PACE only)
 
-```bash
-cp jobs/train_baseline.sh jobs/train_variant_x.sh
-cp jobs/test_baseline.sh  jobs/test_variant_x.sh
-```
-
-Update the `--job-name` and the config path in each:
+If running on PACE, model the script on `jobs/train_smoke.sh`. Update the `--job-name` and the config path:
 ```bash
 #SBATCH --job-name=nafnet_variant_x
 python train.py --opt experiments/train_variant_x.yml
@@ -176,6 +190,7 @@ print(f'ok; {sum(p.numel() for p in m.net.parameters()):,} params')
 ### 5. Submit
 
 ```bash
+python train.py --opt experiments/train_variant_x.yml
 sbatch jobs/train_variant_x.sh
 ```
 
